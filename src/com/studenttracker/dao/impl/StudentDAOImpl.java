@@ -3,6 +3,7 @@ package com.studenttracker.dao.impl;
 import com.studenttracker.dao.StudentDAO;
 import com.studenttracker.exception.DAOException;
 import com.studenttracker.model.Student;
+import com.studenttracker.model.Student.StudentStatus;
 import com.studenttracker.util.DatabaseConnection;
 
 import java.sql.*;
@@ -12,271 +13,301 @@ import java.util.List;
 
 public class StudentDAOImpl implements StudentDAO {
     
-    private final DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+    private final DatabaseConnection dbConn = DatabaseConnection.getInstance();
     
     @Override
     public Integer insert(Student student) {
-        String sql = "INSERT INTO students (student_name, phone_number, status, created_at, archived_at, archived_by) " +
-                     "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO students (full_name, phone_number, whatsapp_number, " +
+                    "parent_phone_number, parent_whatsapp_number, registration_date, status) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
         Connection conn = null;
         try {
-            conn = dbConnection.getConnection();
+            conn = dbConn.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            
             pstmt.setString(1, student.getFullName());
             pstmt.setString(2, student.getPhoneNumber());
-            pstmt.setString(3, student.getStatus().name());
-            pstmt.setString(4, student.getRegistrationDate().toString());
-            pstmt.setString(5, student.getArchivedAt() != null ? student.getArchivedAt().toString() : null);
-            if (student.getArchivedBy() != null) {
-                pstmt.setInt(6, student.getArchivedBy());
-            } else {
-                pstmt.setNull(6, Types.INTEGER);
-            }
+            pstmt.setString(3, student.getWhatsappNumber());
+            pstmt.setString(4, student.getParentPhoneNumber());
+            pstmt.setString(5, student.getParentWhatsappNumber());
+            pstmt.setString(6, student.getRegistrationDate().toString());
+            pstmt.setString(7, student.getStatus().name());
             
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows == 0) {
                 throw new DAOException("Insert student failed, no rows affected");
             }
             
-            ResultSet generatedKeys = pstmt.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                return generatedKeys.getInt(1);
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
             } else {
                 throw new DAOException("Insert student failed, no ID obtained");
             }
+            
         } catch (SQLException e) {
-            throw new DAOException("Failed to insert student: " + student.getFullName(), e);
+            throw new DAOException("Failed to insert student", e);
         } finally {
-            dbConnection.closeConnection(conn);
+            dbConn.closeConnection(conn);
         }
     }
     
     @Override
     public boolean update(Student student) {
-        String sql = "UPDATE students SET student_name = ?, phone_number = ?, status = ?, " +
-                     "archived_at = ?, archived_by = ? WHERE student_id = ?";
+        String sql = "UPDATE students SET full_name = ?, phone_number = ?, whatsapp_number = ?, " +
+                    "parent_phone_number = ?, parent_whatsapp_number = ?, status = ?, " +
+                    "archived_at = ?, archived_by = ? WHERE student_id = ?";
+        
         Connection conn = null;
         try {
-            conn = dbConnection.getConnection();
+            conn = dbConn.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
+            
             pstmt.setString(1, student.getFullName());
             pstmt.setString(2, student.getPhoneNumber());
-            pstmt.setString(3, student.getStatus().name());
-            pstmt.setString(4, student.getArchivedAt() != null ? student.getArchivedAt().toString() : null);
-            if (student.getArchivedBy() != null) {
-                pstmt.setInt(5, student.getArchivedBy());
-            } else {
-                pstmt.setNull(5, Types.INTEGER);
-            }
-            pstmt.setInt(6, student.getStudentId());
+            pstmt.setString(3, student.getWhatsappNumber());
+            pstmt.setString(4, student.getParentPhoneNumber());
+            pstmt.setString(5, student.getParentWhatsappNumber());
+            pstmt.setString(6, student.getStatus().name());
+            pstmt.setString(7, student.getArchivedAt() != null ? student.getArchivedAt().toString() : null);
+            pstmt.setObject(8, student.getArchivedBy());
+            pstmt.setInt(9, student.getStudentId());
             
-            return pstmt.executeUpdate() > 0;
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+            
         } catch (SQLException e) {
-            throw new DAOException("Failed to update student ID: " + student.getStudentId(), e);
+            throw new DAOException("Failed to update student", e);
         } finally {
-            dbConnection.closeConnection(conn);
+            dbConn.closeConnection(conn);
         }
     }
     
     @Override
     public boolean delete(int studentId) {
         String sql = "DELETE FROM students WHERE student_id = ?";
+        
         Connection conn = null;
         try {
-            conn = dbConnection.getConnection();
+            conn = dbConn.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, studentId);
-            return pstmt.executeUpdate() > 0;
+            
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+            
         } catch (SQLException e) {
-            throw new DAOException("Failed to delete student ID: " + studentId, e);
+            throw new DAOException("Failed to delete student", e);
         } finally {
-            dbConnection.closeConnection(conn);
+            dbConn.closeConnection(conn);
         }
     }
     
     @Override
     public Student findById(int studentId) {
         String sql = "SELECT * FROM students WHERE student_id = ?";
+        
         Connection conn = null;
         try {
-            conn = dbConnection.getConnection();
+            conn = dbConn.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, studentId);
-            ResultSet rs = pstmt.executeQuery();
             
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return mapResultSetToStudent(rs);
+                return extractStudentFromResultSet(rs);
             }
             return null;
+            
         } catch (SQLException e) {
-            throw new DAOException("Failed to find student by ID: " + studentId, e);
+            throw new DAOException("Failed to find student by ID", e);
         } finally {
-            dbConnection.closeConnection(conn);
+            dbConn.closeConnection(conn);
         }
     }
     
     @Override
     public List<Student> findAll() {
-        String sql = "SELECT * FROM students ORDER BY student_name";
+        String sql = "SELECT * FROM students ORDER BY full_name";
+        
         Connection conn = null;
-        List<Student> students = new ArrayList<>();
         try {
-            conn = dbConnection.getConnection();
+            conn = dbConn.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             
+            List<Student> students = new ArrayList<>();
             while (rs.next()) {
-                students.add(mapResultSetToStudent(rs));
+                students.add(extractStudentFromResultSet(rs));
             }
             return students;
+            
         } catch (SQLException e) {
-            throw new DAOException("Failed to retrieve all students", e);
+            throw new DAOException("Failed to find all students", e);
         } finally {
-            dbConnection.closeConnection(conn);
+            dbConn.closeConnection(conn);
         }
     }
     
     @Override
-    public List<Student> findByStatus(Student.StudentStatus status) {
-        String sql = "SELECT * FROM students WHERE status = ? ORDER BY student_name";
+    public List<Student> findByStatus(StudentStatus status) {
+        String sql = "SELECT * FROM students WHERE status = ? ORDER BY full_name";
+        
         Connection conn = null;
-        List<Student> students = new ArrayList<>();
         try {
-            conn = dbConnection.getConnection();
+            conn = dbConn.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, status.name());
-            ResultSet rs = pstmt.executeQuery();
             
+            ResultSet rs = pstmt.executeQuery();
+            List<Student> students = new ArrayList<>();
             while (rs.next()) {
-                students.add(mapResultSetToStudent(rs));
+                students.add(extractStudentFromResultSet(rs));
             }
             return students;
+            
         } catch (SQLException e) {
-            throw new DAOException("Failed to find students by status: " + status, e);
+            throw new DAOException("Failed to find students by status", e);
         } finally {
-            dbConnection.closeConnection(conn);
+            dbConn.closeConnection(conn);
         }
     }
     
     @Override
     public List<Student> searchByName(String namePart) {
-        String sql = "SELECT * FROM students WHERE student_name LIKE ? ORDER BY student_name";
+        String sql = "SELECT * FROM students WHERE full_name LIKE ? ORDER BY full_name";
+        
         Connection conn = null;
-        List<Student> students = new ArrayList<>();
         try {
-            conn = dbConnection.getConnection();
+            conn = dbConn.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, "%" + namePart + "%");
-            ResultSet rs = pstmt.executeQuery();
             
+            ResultSet rs = pstmt.executeQuery();
+            List<Student> students = new ArrayList<>();
             while (rs.next()) {
-                students.add(mapResultSetToStudent(rs));
+                students.add(extractStudentFromResultSet(rs));
             }
             return students;
+            
         } catch (SQLException e) {
-            throw new DAOException("Failed to search students by name: " + namePart, e);
+            throw new DAOException("Failed to search students by name", e);
         } finally {
-            dbConnection.closeConnection(conn);
+            dbConn.closeConnection(conn);
         }
     }
     
     @Override
-    public int countByStatus(Student.StudentStatus status) {
+    public int countByStatus(StudentStatus status) {
         String sql = "SELECT COUNT(*) FROM students WHERE status = ?";
+        
         Connection conn = null;
         try {
-            conn = dbConnection.getConnection();
+            conn = dbConn.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, status.name());
-            ResultSet rs = pstmt.executeQuery();
             
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1);
             }
             return 0;
+            
         } catch (SQLException e) {
-            throw new DAOException("Failed to count students by status: " + status, e);
+            throw new DAOException("Failed to count students by status", e);
         } finally {
-            dbConnection.closeConnection(conn);
+            dbConn.closeConnection(conn);
         }
     }
     
     @Override
     public boolean archive(int studentId, int archivedBy) {
-        String sql = "UPDATE students SET status = 'ARCHIVED', archived_at = ?, archived_by = ? " +
-                     "WHERE student_id = ?";
+        String sql = "UPDATE students SET status = ?, archived_at = ?, archived_by = ? WHERE student_id = ?";
+        
         Connection conn = null;
         try {
-            conn = dbConnection.getConnection();
+            conn = dbConn.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, LocalDateTime.now().toString());
-            pstmt.setInt(2, archivedBy);
-            pstmt.setInt(3, studentId);
+            pstmt.setString(1, StudentStatus.ARCHIVED.name());
+            pstmt.setString(2, LocalDateTime.now().toString());
+            pstmt.setInt(3, archivedBy);
+            pstmt.setInt(4, studentId);
             
-            return pstmt.executeUpdate() > 0;
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+            
         } catch (SQLException e) {
-            throw new DAOException("Failed to archive student ID: " + studentId, e);
+            throw new DAOException("Failed to archive student", e);
         } finally {
-            dbConnection.closeConnection(conn);
+            dbConn.closeConnection(conn);
         }
     }
     
     @Override
     public boolean restore(int studentId) {
-        String sql = "UPDATE students SET status = 'ACTIVE', archived_at = NULL, archived_by = NULL " +
-                     "WHERE student_id = ?";
+        String sql = "UPDATE students SET status = ?, archived_at = NULL, archived_by = NULL WHERE student_id = ?";
+        
         Connection conn = null;
         try {
-            conn = dbConnection.getConnection();
+            conn = dbConn.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, studentId);
+            pstmt.setString(1, StudentStatus.ACTIVE.name());
+            pstmt.setInt(2, studentId);
             
-            return pstmt.executeUpdate() > 0;
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+            
         } catch (SQLException e) {
-            throw new DAOException("Failed to restore student ID: " + studentId, e);
+            throw new DAOException("Failed to restore student", e);
         } finally {
-            dbConnection.closeConnection(conn);
+            dbConn.closeConnection(conn);
         }
     }
     
     @Override
     public Student findByPhoneNumber(String phoneNumber) {
         String sql = "SELECT * FROM students WHERE phone_number = ?";
+        
         Connection conn = null;
         try {
-            conn = dbConnection.getConnection();
+            conn = dbConn.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, phoneNumber);
-            ResultSet rs = pstmt.executeQuery();
             
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return mapResultSetToStudent(rs);
+                return extractStudentFromResultSet(rs);
             }
             return null;
+            
         } catch (SQLException e) {
-            throw new DAOException("Failed to find student by phone: " + phoneNumber, e);
+            throw new DAOException("Failed to find student by phone number", e);
         } finally {
-            dbConnection.closeConnection(conn);
+            dbConn.closeConnection(conn);
         }
     }
     
-    private Student mapResultSetToStudent(ResultSet rs) throws SQLException {
+    // Helper method to extract Student object from ResultSet
+    private Student extractStudentFromResultSet(ResultSet rs) throws SQLException {
         Student student = new Student();
         student.setStudentId(rs.getInt("student_id"));
-        student.setFullName(rs.getString("student_name"));
+        student.setFullName(rs.getString("full_name"));
         student.setPhoneNumber(rs.getString("phone_number"));
-        student.setStatus(Student.StudentStatus.valueOf(rs.getString("status")));
-        student.setRegistrationDate(LocalDateTime.parse(rs.getString("created_at")));
+        student.setWhatsappNumber(rs.getString("whatsapp_number"));
+        student.setParentPhoneNumber(rs.getString("parent_phone_number"));
+        student.setParentWhatsappNumber(rs.getString("parent_whatsapp_number"));
         
-        String archivedAt = rs.getString("archived_at");
-        if (archivedAt != null) {
-            student.setArchivedAt(LocalDateTime.parse(archivedAt));
-        }
+        String regDate = rs.getString("registration_date");
+        student.setRegistrationDate(regDate != null ? LocalDateTime.parse(regDate) : null);
         
-        int archivedBy = rs.getInt("archived_by");
-        if (!rs.wasNull()) {
-            student.setArchivedBy(archivedBy);
-        }
+        student.setStatus(StudentStatus.valueOf(rs.getString("status")));
+        
+        String archDate = rs.getString("archived_at");
+        student.setArchivedAt(archDate != null ? LocalDateTime.parse(archDate) : null);
+        
+        Integer archBy = (Integer) rs.getObject("archived_by");
+        student.setArchivedBy(archBy);
         
         return student;
     }

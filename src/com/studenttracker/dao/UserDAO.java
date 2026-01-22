@@ -1,8 +1,12 @@
 package com.studenttracker.dao;
 
 import com.studenttracker.model.User;
+import com.studenttracker.model.User.UserRole;
 import java.util.List;
 
+/**
+ * Data Access Object interface for User entity operations.
+ */
 public interface UserDAO {
     
     // Standard CRUD operations
@@ -12,9 +16,9 @@ public interface UserDAO {
     User findById(int userId);
     List<User> findAll();
     
-    // Custom methods
+    // Custom query methods
     User findByUsername(String username);
-    List<User> findByRole(User.UserRole role);
+    List<User> findByRole(UserRole role);
     boolean usernameExists(String username);
-    int countByRole(User.UserRole role);
+    int countByRole(UserRole role);
 }

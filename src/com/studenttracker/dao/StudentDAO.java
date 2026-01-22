@@ -1,8 +1,12 @@
 package com.studenttracker.dao;
 
 import com.studenttracker.model.Student;
+import com.studenttracker.model.Student.StudentStatus;
 import java.util.List;
 
+/**
+ * Data Access Object interface for Student entity operations.
+ */
 public interface StudentDAO {
     
     // Standard CRUD operations
@@ -12,10 +16,10 @@ public interface StudentDAO {
     Student findById(int studentId);
     List<Student> findAll();
     
-    // Custom methods
-    List<Student> findByStatus(Student.StudentStatus status);
+    // Custom query methods
+    List<Student> findByStatus(StudentStatus status);
     List<Student> searchByName(String namePart);
-    int countByStatus(Student.StudentStatus status);
+    int countByStatus(StudentStatus status);
     boolean archive(int studentId, int archivedBy);
     boolean restore(int studentId);
     Student findByPhoneNumber(String phoneNumber);
