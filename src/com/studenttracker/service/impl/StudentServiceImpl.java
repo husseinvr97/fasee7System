@@ -15,7 +15,7 @@ import com.studenttracker.service.StudentService;
 import com.studenttracker.service.event.StudentArchivedEvent;
 import com.studenttracker.service.event.StudentRegisteredEvent;
 import com.studenttracker.service.event.StudentRestoredEvent;
-
+import com.studenttracker.service.impl.helpers.StudentServiceImplHelpers;
 import com.studenttracker.service.validator.NameValidator;
 import com.studenttracker.service.validator.PhoneValidator;
 
@@ -54,7 +54,7 @@ public class StudentServiceImpl implements StudentService {
                                   String whatsapp, String parentWhatsapp, Integer registeredBy) {
         // Step 1: Validate full name (must be 4 parts)
         NameValidator.validateFullName(fullName);
-        String normalizedName = NameValidator.normalizeFullName(fullName);
+        String normalizedName = StudentServiceImplHelpers.normalizeFullName(fullName);
         
         // Step 2: Validate phone numbers
         PhoneValidator.validatePhoneNumber(phone);
@@ -130,7 +130,7 @@ public class StudentServiceImpl implements StudentService {
         }
         
         // Step 4: Update student fields
-        student.setFullName(NameValidator.normalizeFullName(fullName));
+        student.setFullName(StudentServiceImplHelpers.normalizeFullName(fullName));
         student.setPhoneNumber(phone);
         student.setParentPhoneNumber(parentPhone);
         student.setWhatsappNumber(whatsapp);
