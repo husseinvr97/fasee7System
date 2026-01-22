@@ -16,7 +16,7 @@ public class StudentDAOImpl implements StudentDAO {
     private final DatabaseConnection dbConn = DatabaseConnection.getInstance();
     
     @Override
-    public Integer insert(Student student) {
+    public Integer insert(Student student) throws DAOException {
         String sql = "INSERT INTO students (full_name, phone_number, whatsapp_number, " +
                     "parent_phone_number, parent_whatsapp_number, registration_date, status) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";

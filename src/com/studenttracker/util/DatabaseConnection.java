@@ -1,11 +1,11 @@
 package com.studenttracker.util;
 
-import com.studenttracker.exception.DAOException;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import com.studenttracker.exception.DAOException;
 
 /**
  * Singleton utility class for managing SQLite database connections.

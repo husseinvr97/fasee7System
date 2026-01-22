@@ -3,6 +3,7 @@
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "g:\\Configurations\\sqlite-jdbc-3.51.1.0.jar"
+        "g:\\Configurations\\sqlite-jdbc-3.51.1.0.jar",
+        "g:\\Configurations\\guava-33.5.0-jre.jar"
     ]
 }
