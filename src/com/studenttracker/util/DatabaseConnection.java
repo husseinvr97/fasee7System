@@ -199,6 +199,41 @@ public class DatabaseConnection {
                 "FOREIGN KEY (student_id) REFERENCES students(student_id)" +
                 ")"
             );
+
+            // Create mission_drafts table
+stmt.execute(
+    "CREATE TABLE IF NOT EXISTS mission_drafts (" +
+    "draft_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    "mission_id INTEGER NOT NULL, " +
+    "draft_data TEXT NOT NULL, " +
+    "last_saved TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+    "FOREIGN KEY (mission_id) REFERENCES missions(mission_id) ON DELETE CASCADE, " +
+    "UNIQUE(mission_id)" +
+    ")"
+);
+
+// Create update_requests table
+stmt.execute(
+    "CREATE TABLE IF NOT EXISTS update_requests (" +
+    "request_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    "request_type VARCHAR(50) NOT NULL, " +
+    "entity_type VARCHAR(50) NOT NULL, " +
+    "entity_id INTEGER NOT NULL, " +
+    "requested_changes TEXT NOT NULL, " +
+    "requested_by INTEGER NOT NULL, " +
+    "requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+    "status VARCHAR(20) DEFAULT 'PENDING', " +
+    "reviewed_by INTEGER NULL, " +
+    "reviewed_at TIMESTAMP NULL, " +
+    "review_notes TEXT, " +
+    "FOREIGN KEY (requested_by) REFERENCES users(user_id), " +
+    "FOREIGN KEY (reviewed_by) REFERENCES users(user_id)" +
+    ")"
+);
+
+// Create indexes for update_requests
+stmt.execute("CREATE INDEX IF NOT EXISTS idx_update_requests_status ON update_requests(status)");
+stmt.execute("CREATE INDEX IF NOT EXISTS idx_update_requests_requested_by ON update_requests(requested_by)");
             
             System.out.println("Database initialized successfully!");
             
