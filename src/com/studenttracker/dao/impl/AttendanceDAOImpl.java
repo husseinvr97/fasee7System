@@ -1,20 +1,28 @@
 package com.studenttracker.dao.impl;
 
 import com.studenttracker.dao.AttendanceDAO;
+import com.studenttracker.dao.impl.helpers.AttendanceDAOImplHelpers;
 import com.studenttracker.exception.DAOException;
 import com.studenttracker.model.Attendance;
 import com.studenttracker.model.Attendance.AttendanceStatus;
 import com.studenttracker.util.DatabaseConnection;
+import com.studenttracker.util.ResultSetExtractor;
 
-import java.sql.*;
-import java.time.LocalDateTime;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 public class AttendanceDAOImpl implements AttendanceDAO {
     
     private final DatabaseConnection dbConn = DatabaseConnection.getInstance();
     private static final int BATCH_SIZE = 100;
+    private static final Map<String, Function<Object, Object>> transformers = AttendanceDAOImplHelpers.getTransformers();
     
     @Override
     public Integer insert(Attendance attendance) {
@@ -99,7 +107,7 @@ public class AttendanceDAOImpl implements AttendanceDAO {
     }
     
     @Override
-    public Attendance findById(int attendanceId) {
+    public Attendance findById(int attendanceId)  {
         String sql = "SELECT * FROM attendance WHERE attendance_id = ?";
         
         Connection conn = null;
@@ -110,15 +118,19 @@ public class AttendanceDAOImpl implements AttendanceDAO {
             
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return extractAttendanceFromResultSet(rs);
+                return ResultSetExtractor.extractWithTransformers(rs, Attendance.class, transformers);
             }
             return null;
             
         } catch (SQLException e) {
             throw new DAOException("Failed to find attendance by ID", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             dbConn.closeConnection(conn);
         }
+        
+        return null;
     }
     
     @Override
@@ -133,15 +145,19 @@ public class AttendanceDAOImpl implements AttendanceDAO {
             
             List<Attendance> attendances = new ArrayList<>();
             while (rs.next()) {
-                attendances.add(extractAttendanceFromResultSet(rs));
+                attendances.add(ResultSetExtractor.extractWithTransformers(rs, Attendance.class, transformers));
             }
             return attendances;
             
         } catch (SQLException e) {
             throw new DAOException("Failed to find all attendance records", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             dbConn.closeConnection(conn);
         }
+        
+        return null;
     }
     
     @Override
@@ -157,15 +173,19 @@ public class AttendanceDAOImpl implements AttendanceDAO {
             ResultSet rs = pstmt.executeQuery();
             List<Attendance> attendances = new ArrayList<>();
             while (rs.next()) {
-                attendances.add(extractAttendanceFromResultSet(rs));
+                attendances.add(ResultSetExtractor.extractWithTransformers(rs, Attendance.class, transformers));
             }
             return attendances;
             
         } catch (SQLException e) {
             throw new DAOException("Failed to find attendance by lesson ID", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             dbConn.closeConnection(conn);
         }
+        
+        return null;
     }
     
     @Override
@@ -181,15 +201,20 @@ public class AttendanceDAOImpl implements AttendanceDAO {
             ResultSet rs = pstmt.executeQuery();
             List<Attendance> attendances = new ArrayList<>();
             while (rs.next()) {
-                attendances.add(extractAttendanceFromResultSet(rs));
+                attendances.add(ResultSetExtractor.extractWithTransformers(rs, Attendance.class, transformers));
             }
             return attendances;
             
         } catch (SQLException e) {
             throw new DAOException("Failed to find attendance by student ID", e);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         } finally {
             dbConn.closeConnection(conn);
         }
+        
+        return null;
     }
     
     @Override
@@ -205,15 +230,19 @@ public class AttendanceDAOImpl implements AttendanceDAO {
             
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return extractAttendanceFromResultSet(rs);
+                return ResultSetExtractor.extractWithTransformers(rs, Attendance.class, transformers);
             }
             return null;
             
         } catch (SQLException e) {
             throw new DAOException("Failed to find attendance by lesson and student", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             dbConn.closeConnection(conn);
         }
+        
+        return null;
     }
     
     @Override
@@ -256,15 +285,19 @@ public class AttendanceDAOImpl implements AttendanceDAO {
             ResultSet rs = pstmt.executeQuery();
             List<Attendance> absences = new ArrayList<>();
             while (rs.next()) {
-                absences.add(extractAttendanceFromResultSet(rs));
+                absences.add(ResultSetExtractor.extractWithTransformers(rs, Attendance.class, transformers));
             }
             return absences;
             
         } catch (SQLException e) {
             throw new DAOException("Failed to find consecutive absences", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             dbConn.closeConnection(conn);
         }
+        
+        return null;
     }
     
     @Override
@@ -351,6 +384,7 @@ public class AttendanceDAOImpl implements AttendanceDAO {
     }
     
     // Helper method to extract Attendance object from ResultSet
+    /* 
     private Attendance extractAttendanceFromResultSet(ResultSet rs) throws SQLException {
         Attendance attendance = new Attendance();
         attendance.setAttendanceId(rs.getInt("attendance_id"));
@@ -365,4 +399,5 @@ public class AttendanceDAOImpl implements AttendanceDAO {
         
         return attendance;
     }
+    */
 }
