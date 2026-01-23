@@ -11,6 +11,7 @@ import com.studenttracker.exception.StudentNotFoundException;
 import com.studenttracker.model.Student;
 import com.studenttracker.model.Student.StudentStatus;
 import com.studenttracker.service.ConsecutivityTrackingService;
+import com.studenttracker.service.EventBusService;
 import com.studenttracker.service.StudentService;
 import com.studenttracker.service.event.StudentArchivedEvent;
 import com.studenttracker.service.event.StudentRegisteredEvent;
@@ -29,7 +30,7 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
     
     private final StudentDAO studentDAO;
-    private final EventBus eventBus;
+    private final EventBusService eventBusService;
     private final ConsecutivityTrackingService consecutivityService;
     
     /**
@@ -42,7 +43,7 @@ public class StudentServiceImpl implements StudentService {
     public StudentServiceImpl(StudentDAO studentDAO, EventBus eventBus, 
                              ConsecutivityTrackingService consecutivityService) {
         this.studentDAO = studentDAO;
-        this.eventBus = eventBus;
+        this.eventBusService = EventBusService.getInstance();
         this.consecutivityService = consecutivityService;
     }
     
@@ -94,7 +95,7 @@ public class StudentServiceImpl implements StudentService {
             newStudent.getRegistrationDate(),
             registeredBy
         );
-        publishEvent(event);
+        eventBusService.publish(event);
         
         // Step 7: Return generated student ID
         return studentId;
@@ -198,7 +199,7 @@ public class StudentServiceImpl implements StudentService {
             archivedBy,
             reason
         );
-        publishEvent(event);
+        eventBusService.publish(event);
         
         return true;
     }
@@ -239,7 +240,7 @@ public class StudentServiceImpl implements StudentService {
             LocalDateTime.now(),
             restoredBy
         );
-        publishEvent(event);
+        eventBusService.publish(event);
         
         return true;
     }
@@ -258,22 +259,4 @@ public class StudentServiceImpl implements StudentService {
     }
     
     
-    // ========== Private Helper Methods ==========
-    
-    /**
-     * Publishes an event to the event bus.
-     * Handles any exceptions to prevent event publishing failures from breaking business logic.
-     * 
-     * @param event The event to publish
-     */
-    private void publishEvent(Object event) {
-        try {
-            eventBus.post(event);
-        } catch (Exception e) {
-            // Log error but don't fail the operation
-            System.err.println("Error publishing event " + event.getClass().getSimpleName() + 
-                             ": " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 }

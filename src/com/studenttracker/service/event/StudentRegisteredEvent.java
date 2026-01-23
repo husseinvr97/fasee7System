@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * Event published when a new student is registered.
  * Listeners can react to send welcome SMS, log audit trail, update statistics, etc.
  */
-public class StudentRegisteredEvent {
+public class StudentRegisteredEvent implements Event {
     
     private final Integer studentId;
     private final String fullName;

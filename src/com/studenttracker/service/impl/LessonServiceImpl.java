@@ -1,11 +1,11 @@
 package com.studenttracker.service.impl;
 
-import com.google.common.eventbus.EventBus;
 import com.studenttracker.dao.*;
 import com.studenttracker.exception.*;
 import com.studenttracker.model.*;
 import com.studenttracker.model.Attendance.AttendanceStatus;
 import com.studenttracker.model.Homework.HomeworkStatus;
+import com.studenttracker.service.EventBusService;
 import com.studenttracker.service.LessonService;
 import com.studenttracker.service.event.LessonCreatedEvent;
 import com.studenttracker.service.validator.AdminPermissionValidator;
@@ -23,18 +23,18 @@ public class LessonServiceImpl implements LessonService {
     private final AttendanceDAO attendanceDAO;
     private final HomeworkDAO homeworkDAO;
     private final UserDAO userDAO;
-    private final EventBus eventBus;
+    private final EventBusService eventBusService;
 
     public LessonServiceImpl(LessonDAO lessonDAO, LessonTopicDAO lessonTopicDAO, 
                             QuizDAO quizDAO, AttendanceDAO attendanceDAO, 
-                            HomeworkDAO homeworkDAO, UserDAO userDAO, EventBus eventBus) {
+                            HomeworkDAO homeworkDAO, UserDAO userDAO) {
         this.lessonDAO = lessonDAO;
         this.lessonTopicDAO = lessonTopicDAO;
         this.quizDAO = quizDAO;
         this.attendanceDAO = attendanceDAO;
         this.homeworkDAO = homeworkDAO;
         this.userDAO = userDAO;
-        this.eventBus = eventBus;
+        this.eventBusService = EventBusService.getInstance();
     }
 
     @Override
@@ -72,7 +72,7 @@ public class LessonServiceImpl implements LessonService {
         // Publish event
         LessonCreatedEvent event = new LessonCreatedEvent(
                 lessonId, lessonDate, monthGroup, topicIds, createdBy);
-        eventBus.post(event);
+        eventBusService.publish(event);
         
         return lessonId;
     }

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * Event published when a student is archived.
  * Listeners can react to notify admin, update reports, archive attendance records, etc.
  */
-public class StudentArchivedEvent {
+public class StudentArchivedEvent implements Event {
     
     private final Integer studentId;
     private final LocalDateTime archivedAt;

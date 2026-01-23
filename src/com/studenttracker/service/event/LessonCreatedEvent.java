@@ -3,7 +3,7 @@ package com.studenttracker.service.event;
 import java.time.LocalDate;
 import java.util.List;
 
-public class LessonCreatedEvent {
+public class LessonCreatedEvent implements Event {
     private Integer lessonId;
     private LocalDate lessonDate;
     private String lessonType;

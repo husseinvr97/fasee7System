@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * Event published when an archived student is restored.
  * Listeners can react to send re-enrollment notification, reset tracking data, etc.
  */
-public class StudentRestoredEvent {
+public class StudentRestoredEvent implements Event {
     
     private final Integer studentId;
     private final LocalDateTime restoredAt;
