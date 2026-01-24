@@ -234,6 +234,19 @@ stmt.execute(
 // Create indexes for update_requests
 stmt.execute("CREATE INDEX IF NOT EXISTS idx_update_requests_status ON update_requests(status)");
 stmt.execute("CREATE INDEX IF NOT EXISTS idx_update_requests_requested_by ON update_requests(requested_by)");
+
+// Create target_achievement_streak table
+stmt.execute(
+    "CREATE TABLE IF NOT EXISTS target_achievement_streak (" +
+    "streak_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    "student_id INTEGER NOT NULL, " +
+    "current_streak INTEGER DEFAULT 0, " +
+    "last_achievement_at TIMESTAMP NULL, " +
+    "total_points_earned INTEGER DEFAULT 0, " +
+    "FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE, " +
+    "UNIQUE(student_id)" +
+    ")"
+);
             
             System.out.println("Database initialized successfully!");
             
