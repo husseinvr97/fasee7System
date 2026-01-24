@@ -247,6 +247,25 @@ stmt.execute(
     "UNIQUE(student_id)" +
     ")"
 );
+
+// Create fasee7_points table
+stmt.execute(
+    "CREATE TABLE IF NOT EXISTS fasee7_points (" +
+    "points_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    "student_id INTEGER NOT NULL, " +
+    "quiz_points DECIMAL(10,2) DEFAULT 0, " +
+    "attendance_points INTEGER DEFAULT 0, " +
+    "homework_points INTEGER DEFAULT 0, " +
+    "target_points INTEGER DEFAULT 0, " +
+    "total_points DECIMAL(10,2) DEFAULT 0, " +
+    "last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+    "FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE, " +
+    "UNIQUE(student_id)" +
+    ")"
+);
+
+// Create index for fasee7_points
+stmt.execute("CREATE INDEX IF NOT EXISTS idx_fasee7_total ON fasee7_points(total_points DESC)");
             
             System.out.println("Database initialized successfully!");
             
