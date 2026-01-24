@@ -264,8 +264,55 @@ stmt.execute(
     ")"
 );
 
+
+
 // Create index for fasee7_points
 stmt.execute("CREATE INDEX IF NOT EXISTS idx_fasee7_total ON fasee7_points(total_points DESC)");
+
+// Create fasee7_snapshots table
+stmt.execute(
+    "CREATE TABLE IF NOT EXISTS fasee7_snapshots (" +
+    "snapshot_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    "snapshot_date DATE NOT NULL, " +
+    "snapshot_data TEXT NOT NULL, " +
+    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+    ")"
+);
+
+// Create index for fasee7_snapshots
+stmt.execute("CREATE INDEX IF NOT EXISTS idx_fasee7_snapshots_date ON fasee7_snapshots(snapshot_date)");
+
+// Create notifications table
+stmt.execute(
+    "CREATE TABLE IF NOT EXISTS notifications (" +
+    "notification_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    "user_id INTEGER NOT NULL, " +
+    "notification_type VARCHAR(50) NOT NULL, " +
+    "message TEXT NOT NULL, " +
+    "is_read BOOLEAN DEFAULT 0, " +
+    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+    "FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE" +
+    ")"
+);
+
+// Create indexes for notifications
+stmt.execute("CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id)");
+stmt.execute("CREATE INDEX IF NOT EXISTS idx_notifications_read ON notifications(is_read)");
+
+// Create monthly_reports table
+stmt.execute(
+    "CREATE TABLE IF NOT EXISTS monthly_reports (" +
+    "report_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    "report_month VARCHAR(20) NOT NULL, " +
+    "report_data TEXT NOT NULL, " +
+    "generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+    "generated_by INTEGER NOT NULL, " +
+    "FOREIGN KEY (generated_by) REFERENCES users(user_id)" +
+    ")"
+);
+
+// Create index for monthly_reports
+stmt.execute("CREATE INDEX IF NOT EXISTS idx_monthly_reports_month ON monthly_reports(report_month)");
             
             System.out.println("Database initialized successfully!");
             
