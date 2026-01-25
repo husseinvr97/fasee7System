@@ -30,6 +30,19 @@ public class HomeworkSummary {
     public int getNotDoneCount() { return notDoneCount; }
     public void setNotDoneCount(int notDoneCount) { this.notDoneCount = notDoneCount; }
 
+    // Calculate percentage methods to add to existing HomeworkSummary
+    public double getDonePercentage() {
+        return totalStudents > 0 ? (doneCount * 100.0 / totalStudents) : 0.0;
+    }
+
+    public double getPartiallyDonePercentage() {
+        return totalStudents > 0 ? (partiallyDoneCount * 100.0 / totalStudents) : 0.0;
+    }
+
+    public double getNotDonePercentage() {
+        return totalStudents > 0 ? (notDoneCount * 100.0 / totalStudents) : 0.0;
+    }
+
     @Override
     public String toString() {
         return String.format("HomeworkSummary{total=%d, done=%d, partial=%d, notDone=%d}",
