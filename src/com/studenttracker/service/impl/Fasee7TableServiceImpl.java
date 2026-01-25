@@ -5,6 +5,7 @@ import com.studenttracker.dao.*;
 import com.studenttracker.model.Attendance;
 import com.studenttracker.model.Fasee7Points;
 import com.studenttracker.model.Fasee7Snapshot;
+import com.studenttracker.model.Homework;
 import com.studenttracker.model.QuizScore;
 import com.studenttracker.model.Student;
 import com.studenttracker.service.EventBusService;
@@ -102,16 +103,22 @@ public class Fasee7TableServiceImpl implements Fasee7TableService {
     
     /**
      * Handles HomeworkBatchCompletedEvent.
-     * Since this event doesn't contain lesson info, we need a different approach.
-     * This is triggered after bulk homework marking, so we recalculate for recently updated students.
-     * Note: If you need specific student IDs, consider modifying the event to include lessonId.
+     * Updates homework points for all students in this lesson.
      */
     @Subscribe
     public void onHomeworkBatchCompleted(HomeworkBatchCompletedEvent event) {
-        // This event doesn't provide student IDs or lesson ID
-        // For now, we'll skip auto-update here
-        // Alternative: Modify the event to include lessonId, then fetch homework by lesson
-        // TODO: Consider updating event structure to include lessonId
+        // Get all homework records for this lesson
+        List<Homework> homeworks = homeworkDAO.findByLessonId(event.getLessonId());
+        
+        // Get unique student IDs
+        Set<Integer> studentIds = homeworks.stream()
+            .map(Homework::getStudentId)
+            .collect(Collectors.toSet());
+        
+        // Update points for each student
+        for (Integer studentId : studentIds) {
+            updateHomeworkPoints(studentId);
+        }
     }
     
     /**

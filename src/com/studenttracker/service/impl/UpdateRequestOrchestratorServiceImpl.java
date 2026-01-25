@@ -36,6 +36,7 @@ public class UpdateRequestOrchestratorServiceImpl implements UpdateRequestOrches
     private final TargetService targetService;
     private final EventBusService eventBusService;
     private final DatabaseConnection databaseConnection;
+    private final Fasee7TableService fasee7Service;
     
     public UpdateRequestOrchestratorServiceImpl(
             UpdateRequestDAO updateRequestDAO,
@@ -48,6 +49,7 @@ public class UpdateRequestOrchestratorServiceImpl implements UpdateRequestOrches
             ConsecutivityTrackingService consecutivityService,
             WarningService warningService,
             TargetService targetService,
+            Fasee7TableService fasee7Service,
             EventBusService eventBusService,
             DatabaseConnection databaseConnection) {
         this.updateRequestDAO = updateRequestDAO;
@@ -62,6 +64,7 @@ public class UpdateRequestOrchestratorServiceImpl implements UpdateRequestOrches
         this.targetService = targetService;
         this.eventBusService = eventBusService;
         this.databaseConnection = databaseConnection;
+        this.fasee7Service = fasee7Service;
     }
     
     // ========== Submit Request ==========
@@ -266,7 +269,7 @@ public class UpdateRequestOrchestratorServiceImpl implements UpdateRequestOrches
                 // Trigger cascading updates
                 try {
                     UpdateRequestOrchestratorServiceImplHelpers.triggerCascadingUpdates(
-                        request, consecutivityService, warningService, targetService
+                        request, consecutivityService, warningService, targetService , fasee7Service
                     );
                     
                     // Update status to COMPLETED

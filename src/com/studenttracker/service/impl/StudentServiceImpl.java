@@ -226,6 +226,7 @@ public class StudentServiceImpl implements StudentService {
         
         // Step 4: Reset consecutivity tracking
         // TODO: Implement when consecutivity module is ready
+        consecutivityService.resetConsecutivity(studentId);
         try {
             consecutivityService.resetConsecutivity(studentId);
         } catch (Exception e) {
