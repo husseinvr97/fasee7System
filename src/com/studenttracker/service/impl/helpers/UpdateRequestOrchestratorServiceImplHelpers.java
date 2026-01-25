@@ -189,46 +189,61 @@ public class UpdateRequestOrchestratorServiceImplHelpers {
     // ========== Cascading Updates ==========
     
     /**
-     * Triggers cascading updates after successful execution.
-     * 
-     * @param request The update request
-     * @param consecutivityService Consecutivity service
-     * @param warningService Warning service
-     * @param targetService Target service
-     */
-    public static void triggerCascadingUpdates(UpdateRequest request,
-                                               ConsecutivityTrackingService consecutivityService,
-                                               WarningService warningService,
-                                               TargetService targetService) {
-        try {
-            var changes = parseRequestedChanges(request.getRequestedChanges());
-            Integer studentId = extractStudentId(request, changes);
-            
-            if (studentId == null) {
-                return; // No student involved, skip cascading
-            }
-            
-            // 1. Recalculate consecutivity
-            String requestType = request.getRequestType();
-            if ("UPDATE_ATTENDANCE".equals(requestType)) {
-                // Consecutivity will be handled by event subscribers
-                // No direct call needed here
-            }
-            
-            // 2. Check and generate/resolve warnings
-            warningService.checkAndGenerateWarnings(studentId);
-            
-            // 3. Check targets (TODO: implement logic)
-            // targetService.checkTargets(studentId);
-            
-            // 4. Recalculate Fasee7 points (TODO: implement)
-            // fasee7Service.recalculateFasee7Points(studentId);
-            
-        } catch (Exception e) {
-            System.err.println("Warning: Some cascading updates failed: " + e.getMessage());
-            // Don't throw - allow main update to succeed
+ * Triggers cascading updates after successful execution.
+ * 
+ * @param request The update request
+ * @param consecutivityService Consecutivity service
+ * @param warningService Warning service
+ * @param targetService Target service
+ * @param fasee7Service Fasee7 table service
+ */
+public static void triggerCascadingUpdates(UpdateRequest request,
+                                           ConsecutivityTrackingService consecutivityService,
+                                           WarningService warningService,
+                                           TargetService targetService,
+                                           Fasee7TableService fasee7Service) {
+    try {
+        var changes = parseRequestedChanges(request.getRequestedChanges());
+        Integer studentId = extractStudentId(request, changes);
+        
+        if (studentId == null) {
+            return; // No student involved, skip cascading
         }
+        
+        String requestType = request.getRequestType();
+        
+        // 1. Recalculate consecutivity (handled by event subscribers automatically)
+        // No direct call needed - AttendanceMarkedEvent triggers this
+        
+        // 2. Check and generate/resolve warnings
+        warningService.checkAndGenerateWarnings(studentId);
+        
+        // 3. Recalculate Fasee7 points based on request type
+        switch (requestType) {
+            case "UPDATE_ATTENDANCE":
+                fasee7Service.updateAttendancePoints(studentId);
+                break;
+            case "UPDATE_HOMEWORK":
+                fasee7Service.updateHomeworkPoints(studentId);
+                break;
+            case "UPDATE_QUIZ_SCORE":
+                fasee7Service.updateQuizPoints(studentId);
+                break;
+            case "RESTORE_ARCHIVED_STUDENT":
+                // Recalculate all points for restored student
+                fasee7Service.recalculatePoints(studentId);
+                break;
+            default:
+                // For other request types, do full recalculation to be safe
+                fasee7Service.recalculatePoints(studentId);
+                break;
+        }
+        
+    } catch (Exception e) {
+        System.err.println("Warning: Some cascading updates failed: " + e.getMessage());
+        // Don't throw - allow main update to succeed
     }
+}
     
     /**
      * Extracts student ID from request.

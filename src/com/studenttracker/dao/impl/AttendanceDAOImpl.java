@@ -208,7 +208,6 @@ public class AttendanceDAOImpl implements AttendanceDAO {
         } catch (SQLException e) {
             throw new DAOException("Failed to find attendance by student ID", e);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             dbConn.closeConnection(conn);

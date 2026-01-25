@@ -1,6 +1,6 @@
 package com.studenttracker.service.impl;
 
-import com.studenttracker.dao.AttendanceDAO;
+
 import com.studenttracker.dao.BehavioralIncidentDAO;
 import com.studenttracker.dao.ConsecutivityTrackingDAO;
 import com.studenttracker.exception.DAOException;
@@ -27,7 +27,6 @@ import java.util.List;
 public class ConsecutivityTrackingServiceImpl implements ConsecutivityTrackingService {
     
     private final ConsecutivityTrackingDAO consecutivityDAO;
-    private final AttendanceDAO attendanceDAO;
     private final BehavioralIncidentDAO behavioralIncidentDAO;
     private final EventBusService eventBus;
     
@@ -40,11 +39,10 @@ public class ConsecutivityTrackingServiceImpl implements ConsecutivityTrackingSe
      * Constructor with dependency injection.
      */
     public ConsecutivityTrackingServiceImpl(ConsecutivityTrackingDAO consecutivityDAO,
-                                           AttendanceDAO attendanceDAO,
+                                           
                                            BehavioralIncidentDAO behavioralIncidentDAO,
                                            EventBusService eventBus) {
         this.consecutivityDAO = consecutivityDAO;
-        this.attendanceDAO = attendanceDAO;
         this.behavioralIncidentDAO = behavioralIncidentDAO;
         this.eventBus = eventBus;
     }
