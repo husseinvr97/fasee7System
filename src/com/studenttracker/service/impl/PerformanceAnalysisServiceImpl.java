@@ -3,7 +3,6 @@ package com.studenttracker.service.impl;
 import com.studenttracker.dao.PerformanceIndicatorDAO;
 import com.studenttracker.dao.QuizScoreDAO;
 import com.studenttracker.dao.QuizQuestionDAO;
-import com.studenttracker.dao.QuizCategoryTotalDAO;
 import com.studenttracker.model.PerformanceIndicator;
 import com.studenttracker.model.PerformanceTrend;
 import com.studenttracker.model.QuizQuestion;
@@ -33,7 +32,6 @@ public class PerformanceAnalysisServiceImpl implements PerformanceAnalysisServic
     private final PerformanceIndicatorDAO performanceIndicatorDAO;
     private final QuizScoreDAO quizScoreDAO;
     private final QuizQuestionDAO quizQuestionDAO;
-    private final QuizCategoryTotalDAO quizCategoryTotalDAO;
     private final EventBusService eventBusService;
     
     /**
@@ -42,12 +40,10 @@ public class PerformanceAnalysisServiceImpl implements PerformanceAnalysisServic
     public PerformanceAnalysisServiceImpl(PerformanceIndicatorDAO performanceIndicatorDAO,
                                          QuizScoreDAO quizScoreDAO,
                                          QuizQuestionDAO quizQuestionDAO,
-                                         QuizCategoryTotalDAO quizCategoryTotalDAO,
                                          EventBusService eventBusService) {
         this.performanceIndicatorDAO = performanceIndicatorDAO;
         this.quizScoreDAO = quizScoreDAO;
         this.quizQuestionDAO = quizQuestionDAO;
-        this.quizCategoryTotalDAO = quizCategoryTotalDAO;
         this.eventBusService = eventBusService;
     }
     

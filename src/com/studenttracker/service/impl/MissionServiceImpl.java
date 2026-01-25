@@ -144,7 +144,7 @@ public class MissionServiceImpl implements MissionService {
         
         if (success) {
             // Publish event
-            eventBus.publish(new MissionDraftSavedEvent(missionId));
+            eventBus.publish(new MissionDraftSavedEvent(missionId , draftDataJson, LocalDateTime.now()));
         }
         
         return success;

@@ -1,31 +1,21 @@
 package com.studenttracker.model;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import com.studenttracker.model.LessonTopic.TopicCategory;
 
 public class QuizCategoryTotal {
-    // Assuming TopicCategory enum - you should use the one from LessonTopic
-    public enum TopicCategory {
-        MATH,
-        SCIENCE,
-        ENGLISH,
-        HISTORY,
-        PROGRAMMING,
-        OTHER
-    }
 
     private Integer totalId;
     private Integer quizId;
     private Integer studentId;
     private TopicCategory category;
-    private BigDecimal pointsEarned;
-    private BigDecimal totalPoints;
+    private Double pointsEarned;
+    private Double totalPoints;
 
     public QuizCategoryTotal() {
     }
 
     public QuizCategoryTotal(Integer quizId, Integer studentId, TopicCategory category, 
-                             BigDecimal pointsEarned, BigDecimal totalPoints) {
+                             Double pointsEarned, Double totalPoints) {
         this.quizId = quizId;
         this.studentId = studentId;
         this.category = category;
@@ -65,28 +55,27 @@ public class QuizCategoryTotal {
         this.category = category;
     }
 
-    public BigDecimal getPointsEarned() {
+    public Double getPointsEarned() {
         return pointsEarned;
     }
 
-    public void setPointsEarned(BigDecimal pointsEarned) {
+    public void setPointsEarned(Double pointsEarned) {
         this.pointsEarned = pointsEarned;
     }
 
-    public BigDecimal getTotalPoints() {
+    public Double getTotalPoints() {
         return totalPoints;
     }
 
-    public void setTotalPoints(BigDecimal totalPoints) {
+    public void setTotalPoints(Double totalPoints) {
         this.totalPoints = totalPoints;
     }
 
-    public BigDecimal getPercentage() {
-        if (totalPoints == null || totalPoints.compareTo(BigDecimal.ZERO) == 0) {
-            return BigDecimal.ZERO;
+    public Double getPercentage() {
+        if (totalPoints == null || Double.compare( totalPoints,0.0) == 0) {
+            return 0.0;
         }
-        return pointsEarned.divide(totalPoints, 4, RoundingMode.HALF_UP)
-                .multiply(new BigDecimal("100"));
+        return (pointsEarned / 4) * 100;
     }
 
     @Override

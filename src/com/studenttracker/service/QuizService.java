@@ -7,7 +7,7 @@ import com.studenttracker.model.QuizScore;
 import com.studenttracker.model.QuizStatistics;
 import com.studenttracker.model.LessonTopic.TopicCategory;
 
-import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.Map;
 
@@ -93,7 +93,7 @@ public interface QuizService {
      * @return true if successful, false otherwise
      * @throws ValidationException if newPoints exceeds question max points
      */
-    boolean updateQuizScore(Integer scoreId, BigDecimal newPoints);
+    boolean updateQuizScore(Integer scoreId, Double newPoints);
     
     
     // ========== Retrieval Operations ==========
@@ -159,7 +159,7 @@ public interface QuizService {
      * @param maxPoints Maximum points for the question
      * @return Points earned (maxPoints if correct, 0 if wrong)
      */
-    BigDecimal autoGradeMCQ(String studentAnswer, String modelAnswer, BigDecimal maxPoints);
+    Double autoGradeMCQ(String studentAnswer, String modelAnswer, Double maxPoints);
     
     
     // ========== Statistics ==========
@@ -171,7 +171,7 @@ public interface QuizService {
      * @param studentId ID of the student
      * @return Total score
      */
-    BigDecimal getStudentQuizTotal(Integer quizId, Integer studentId);
+    Double getStudentQuizTotal(Integer quizId, Integer studentId);
     
     /**
      * Gets statistics for a quiz.
@@ -187,7 +187,7 @@ public interface QuizService {
      * @param quizId ID of the quiz
      * @return Map of category to total points
      */
-    Map<TopicCategory, BigDecimal> getQuizCategoryBreakdown(Integer quizId);
+    Map<TopicCategory, Double> getQuizCategoryBreakdown(Integer quizId);
     
     /**
      * Calculates total quiz points for a student across all quizzes.
@@ -196,5 +196,5 @@ public interface QuizService {
      * @param studentId ID of the student
      * @return Total quiz points
      */
-    BigDecimal calculateQuizPoints(Integer studentId);
+    Double calculateQuizPoints(Integer studentId);
 }

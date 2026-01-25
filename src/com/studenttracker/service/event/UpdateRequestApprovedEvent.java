@@ -7,23 +7,37 @@ import java.time.LocalDateTime;
  */
 public class UpdateRequestApprovedEvent implements Event {
     private final Integer requestId;
+    private final String requestType;
+    private final String entityType;
+    private final Integer entityId;
     private final Integer approvedBy;
-    private final LocalDateTime approvedAt;
+    private final LocalDateTime approvedAt = LocalDateTime.now();
     
     public UpdateRequestApprovedEvent(Integer requestId, Integer approvedBy, 
-                                     LocalDateTime approvedAt) {
+                                      String entityType, Integer entityId , String requestType) {
         this.requestId = requestId;
         this.approvedBy = approvedBy;
-        this.approvedAt = approvedAt;
+        this.entityType = entityType;
+        this.entityId = entityId;
+        this.requestType = requestType;
     }
     
     public Integer getRequestId() { return requestId; }
     public Integer getApprovedBy() { return approvedBy; }
     public LocalDateTime getApprovedAt() { return approvedAt; }
+    public String getRequestType() { return requestType; }
+    public String getEntityType() { return entityType; }
+    public Integer getEntityId() { return entityId; }
     
     @Override
     public String toString() {
-        return "UpdateRequestApprovedEvent{requestId=" + requestId + 
-               ", approvedBy=" + approvedBy + "}";
+        return "UpdateRequestApprovedEvent{" +
+                "requestId=" + requestId +
+                ", requestType='" + requestType + '\'' +
+                ", entityType='" + entityType + '\'' +
+                ", entityId=" + entityId +
+                ", approvedBy=" + approvedBy +
+                ", approvedAt=" + approvedAt +
+                '}';
     }
 }

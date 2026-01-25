@@ -6,7 +6,6 @@ import com.studenttracker.exception.UnauthorizedException;
 import com.studenttracker.exception.ValidationException;
 import com.studenttracker.model.UpdateRequest;
 import com.studenttracker.model.UpdateRequest.RequestStatus;
-import com.studenttracker.model.User;
 import com.studenttracker.service.*;
 import com.studenttracker.service.event.UpdateRequestApprovedEvent;
 import com.studenttracker.service.event.UpdateRequestRejectedEvent;
@@ -96,13 +95,18 @@ public class UpdateRequestOrchestratorServiceImpl implements UpdateRequestOrches
             
             // Step 4: Insert into database
             Integer requestId = updateRequestDAO.insert(request);
+
+            if(requestId == null) {
+                throw new ServiceException("Failed to submit update request");
+            }
             
             // Step 5: Publish event
             UpdateRequestSubmittedEvent event = new UpdateRequestSubmittedEvent(
                 requestId,
                 requestType,
                 requestedBy,
-                LocalDateTime.now()
+                entityType,
+                entityId
             );
             eventBusService.publish(event);
             
@@ -142,7 +146,9 @@ public class UpdateRequestOrchestratorServiceImpl implements UpdateRequestOrches
                 UpdateRequestApprovedEvent event = new UpdateRequestApprovedEvent(
                     requestId,
                     adminId,
-                    LocalDateTime.now()
+                    request.getEntityType(),
+                    request.getEntityId(),
+                    request.getRequestType()
                 );
                 eventBusService.publish(event);
             }
@@ -180,7 +186,7 @@ public class UpdateRequestOrchestratorServiceImpl implements UpdateRequestOrches
                     requestId,
                     adminId,
                     reason,
-                    LocalDateTime.now()
+                    request.getRequestType()
                 );
                 eventBusService.publish(event);
             }
@@ -366,14 +372,14 @@ public class UpdateRequestOrchestratorServiceImpl implements UpdateRequestOrches
             
             Integer scoreId = (Integer) changes.get("scoreId");
             Object pointsObj = changes.get("newPoints");
-            java.math.BigDecimal newPoints;
+            Double newPoints;
             
             if (pointsObj instanceof Integer) {
-                newPoints = java.math.BigDecimal.valueOf((Integer) pointsObj);
+                newPoints = (Double) pointsObj;
             } else if (pointsObj instanceof Double) {
-                newPoints = java.math.BigDecimal.valueOf((Double) pointsObj);
+                newPoints = (Double) pointsObj;
             } else {
-                newPoints = new java.math.BigDecimal(pointsObj.toString());
+                newPoints = Double.parseDouble(pointsObj.toString());
             }
             
             return quizService.updateQuizScore(scoreId, newPoints);

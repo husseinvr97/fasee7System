@@ -35,11 +35,11 @@ public class Fasee7PointsDAOImpl implements Fasee7PointsDAO {
             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             
             pstmt.setInt(1, points.getStudentId());
-            pstmt.setBigDecimal(2, points.getQuizPoints());
+            pstmt.setDouble(2, points.getQuizPoints());
             pstmt.setInt(3, points.getAttendancePoints());
             pstmt.setInt(4, points.getHomeworkPoints());
             pstmt.setInt(5, points.getTargetPoints());
-            pstmt.setBigDecimal(6, points.getTotalPoints());
+            pstmt.setDouble(6, points.getTotalPoints());
             pstmt.setString(7, points.getLastUpdated() != null ? points.getLastUpdated().toString() : null);
             
             int affectedRows = pstmt.executeUpdate();
@@ -73,11 +73,11 @@ public class Fasee7PointsDAOImpl implements Fasee7PointsDAO {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             
             pstmt.setInt(1, points.getStudentId());
-            pstmt.setBigDecimal(2, points.getQuizPoints());
+            pstmt.setDouble(2, points.getQuizPoints());
             pstmt.setInt(3, points.getAttendancePoints());
             pstmt.setInt(4, points.getHomeworkPoints());
             pstmt.setInt(5, points.getTargetPoints());
-            pstmt.setBigDecimal(6, points.getTotalPoints());
+            pstmt.setDouble(6, points.getTotalPoints());
             pstmt.setString(7, points.getLastUpdated() != null ? points.getLastUpdated().toString() : null);
             pstmt.setInt(8, points.getPointsId());
             
@@ -199,11 +199,11 @@ public class Fasee7PointsDAOImpl implements Fasee7PointsDAO {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             
             pstmt.setInt(1, points.getStudentId());
-            pstmt.setBigDecimal(2, points.getQuizPoints());
+            pstmt.setDouble(2, points.getQuizPoints());
             pstmt.setInt(3, points.getAttendancePoints());
             pstmt.setInt(4, points.getHomeworkPoints());
             pstmt.setInt(5, points.getTargetPoints());
-            pstmt.setBigDecimal(6, points.getTotalPoints());
+            pstmt.setDouble(6, points.getTotalPoints());
             pstmt.setString(7, points.getLastUpdated() != null ? points.getLastUpdated().toString() : null);
             
             int affectedRows = pstmt.executeUpdate();

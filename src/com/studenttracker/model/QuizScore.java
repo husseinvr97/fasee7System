@@ -1,6 +1,5 @@
 package com.studenttracker.model;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class QuizScore {
@@ -8,7 +7,7 @@ public class QuizScore {
     private Integer quizId;
     private Integer studentId;
     private Integer questionId;
-    private BigDecimal pointsEarned;
+    private Double pointsEarned;
     private LocalDateTime enteredAt;
     private Integer enteredBy;
 
@@ -16,7 +15,7 @@ public class QuizScore {
     }
 
     public QuizScore(Integer quizId, Integer studentId, Integer questionId, 
-                     BigDecimal pointsEarned, LocalDateTime enteredAt, Integer enteredBy) {
+                     Double pointsEarned, LocalDateTime enteredAt, Integer enteredBy) {
         this.quizId = quizId;
         this.studentId = studentId;
         this.questionId = questionId;
@@ -57,11 +56,11 @@ public class QuizScore {
         this.questionId = questionId;
     }
 
-    public BigDecimal getPointsEarned() {
+    public Double getPointsEarned() {
         return pointsEarned;
     }
 
-    public void setPointsEarned(BigDecimal pointsEarned) {
+    public void setPointsEarned(Double pointsEarned) {
         this.pointsEarned = pointsEarned;
     }
 

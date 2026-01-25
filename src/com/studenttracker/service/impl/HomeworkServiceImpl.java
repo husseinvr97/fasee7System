@@ -81,7 +81,7 @@ public class HomeworkServiceImpl implements HomeworkService {
         homework.setHomeworkId(homeworkId);
         
         // Step 6: Publish HomeworkRecordedEvent
-        HomeworkRecordedEvent event = new HomeworkRecordedEvent(homework, markedBy);
+        HomeworkRecordedEvent event = new HomeworkRecordedEvent(lessonId, studentId, status , markedBy);
         eventBusService.publish(event);
         
         return true;
@@ -126,13 +126,18 @@ public class HomeworkServiceImpl implements HomeworkService {
         
         // Step 3: Publish HomeworkRecordedEvent for each homework
         for (Homework hw : homeworkList) {
-            HomeworkRecordedEvent event = new HomeworkRecordedEvent(hw, markedBy);
+            HomeworkRecordedEvent event = new HomeworkRecordedEvent(hw.getLessonId(), hw.getStudentId(), hw.getStatus(), markedBy);
             eventBusService.publish(event);
         }
         
         // Step 4: Publish HomeworkBatchCompletedEvent
         HomeworkBatchCompletedEvent batchEvent = new HomeworkBatchCompletedEvent(
-            homeworkList.size(), markedBy
+            homeworkList.get(0).getLessonId(),
+            homeworkList.size(),
+            (int)homeworkList.stream().filter(hw -> hw.getStatus() == HomeworkStatus.DONE).count(),
+            (int)homeworkList.stream().filter(hw -> hw.getStatus() == HomeworkStatus.PARTIALLY_DONE).count(),
+            (int)homeworkList.stream().filter(hw -> hw.getStatus() == HomeworkStatus.NOT_DONE).count(),
+            markedBy
         );
         eventBusService.publish(batchEvent);
         
@@ -162,7 +167,7 @@ public class HomeworkServiceImpl implements HomeworkService {
         }
         
         // Step 4: Publish HomeworkRecordedEvent
-        HomeworkRecordedEvent event = new HomeworkRecordedEvent(homework, homework.getMarkedBy());
+        HomeworkRecordedEvent event = new HomeworkRecordedEvent(homework.getLessonId(), homework.getStudentId(), newStatus, homework.getMarkedBy());
         eventBusService.publish(event);
         
         return true;

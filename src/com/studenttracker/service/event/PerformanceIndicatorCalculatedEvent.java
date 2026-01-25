@@ -9,7 +9,7 @@ public class PerformanceIndicatorCalculatedEvent implements Event {
     private final Integer quizId;
     private final int piValue;
     private final int cumulativePi;
-    private final LocalDateTime calculatedAt;
+    private final LocalDateTime calculatedAt = LocalDateTime.now();
 
     public PerformanceIndicatorCalculatedEvent(Integer studentId, TopicCategory category, 
                                               Integer quizId, int piValue, int cumulativePi,
@@ -19,7 +19,6 @@ public class PerformanceIndicatorCalculatedEvent implements Event {
         this.quizId = quizId;
         this.piValue = piValue;
         this.cumulativePi = cumulativePi;
-        this.calculatedAt = calculatedAt;
     }
 
     public Integer getStudentId() {

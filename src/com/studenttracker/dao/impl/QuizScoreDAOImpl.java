@@ -5,7 +5,6 @@ import com.studenttracker.exception.DAOException;
 import com.studenttracker.model.QuizScore;
 import com.studenttracker.util.DatabaseConnection;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -277,7 +276,7 @@ public class QuizScoreDAOImpl implements QuizScoreDAO {
     }
     
     @Override
-    public BigDecimal getTotalScoreForStudent(int quizId, int studentId) {
+    public Double getTotalScoreForStudent(int quizId, int studentId) {
         String sql = "SELECT SUM(points_earned) as total FROM quiz_scores WHERE quiz_id = ? AND student_id = ?";
         
         Connection conn = null;
@@ -290,9 +289,9 @@ public class QuizScoreDAOImpl implements QuizScoreDAO {
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 String total = rs.getString("total");
-                return total != null ? new BigDecimal(total) : BigDecimal.ZERO;
+                return total != null ? Double.parseDouble(total) : 0.0;
             }
-            return BigDecimal.ZERO;
+            return 0.0;
             
         } catch (SQLException e) {
             throw new DAOException("Failed to get total score for student", e);
@@ -310,7 +309,7 @@ public class QuizScoreDAOImpl implements QuizScoreDAO {
         score.setQuestionId(rs.getInt("question_id"));
         
         String pointsEarned = rs.getString("points_earned");
-        score.setPointsEarned(pointsEarned != null ? new BigDecimal(pointsEarned) : BigDecimal.ZERO);
+        score.setPointsEarned(pointsEarned != null ? Double.valueOf(pointsEarned) : 0.0);
         
         String enteredAt = rs.getString("entered_at");
         score.setEnteredAt(enteredAt != null ? LocalDateTime.parse(enteredAt) : null);

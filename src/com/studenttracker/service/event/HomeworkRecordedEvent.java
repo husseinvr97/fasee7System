@@ -1,29 +1,50 @@
 package com.studenttracker.service.event;
 
-import com.studenttracker.model.Homework;
-import java.time.LocalDateTime;
+
+import com.studenttracker.model.Homework.HomeworkStatus;
+
+
 
 /**
  * Event published when homework is recorded or updated.
  */
 public class HomeworkRecordedEvent implements Event {
-    private Homework homework;
-    private Integer markedBy;
-    private LocalDateTime timestamp;
+    private final Integer lessonId;
+    private final Integer studentId;
+    private final HomeworkStatus status; // DONE/PARTIALLY_DONE/NOT_DONE
+    private final Integer markedBy;
     
-    public HomeworkRecordedEvent(Homework homework, Integer markedBy) {
-        this.homework = homework;
+    public HomeworkRecordedEvent(Integer lessonId, Integer studentId, HomeworkStatus status ,Integer markedBy) {
+        this.lessonId = lessonId;
+        this.studentId = studentId;
+        this.status = status;
         this.markedBy = markedBy;
-        this.timestamp = LocalDateTime.now();
     }
     
     // Getters
-    public Homework getHomework() { return homework; }
-    public Integer getMarkedBy() { return markedBy; }
-    public LocalDateTime getTimestamp() { return timestamp; }
+    public Integer getLessonId() {
+        return lessonId;
+    }
+    
+    public Integer getStudentId() {
+        return studentId;
+    }
+    
+    public HomeworkStatus getStatus() {
+        return status;
+    }
+    
+    public Integer getMarkedBy() {
+        return markedBy;
+    }
     
     @Override
     public String toString() {
-        return "HomeworkRecordedEvent{homework=" + homework + ", markedBy=" + markedBy + "}";
+        return "HomeworkRecordedEvent{" +
+                "lesson=" + lessonId +
+                ", student=" + studentId +
+                ", status=" + status +
+                ", markedBy=" + markedBy +
+                '}';
     }
 }

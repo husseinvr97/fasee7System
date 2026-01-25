@@ -24,10 +24,10 @@ import com.studenttracker.service.event.QuizGradingCompletedEvent;
 import com.studenttracker.service.impl.helpers.QuizServiceImplHelpers;
 import com.studenttracker.service.validator.AdminPermissionValidator;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -75,10 +75,10 @@ public class QuizServiceImpl implements QuizService {
             throw new ValidationException("At least one question is required");
         }
         
-        // Step 3: Calculate total marks
-        BigDecimal totalMarks = BigDecimal.ZERO;
-        for (QuizQuestion question : questions) {
-            totalMarks = totalMarks.add(question.getPoints());
+        Double totalMarks = 0.0;
+        for(QuizQuestion question : questions)
+        {
+            totalMarks += question.getPoints();
         }
         
         // Step 4: Create quiz entity
@@ -100,12 +100,20 @@ public class QuizServiceImpl implements QuizService {
         if (!questionsInserted) {
             return null;
         }
+
+        HashSet<TopicCategory> category = new HashSet<>();
+        List<TopicCategory> categories = new ArrayList<>();
+        for (QuizQuestion question : questions) {
+            if(category.contains(question.getCategory()))
+                continue;
+            categories.add(question.getCategory());
+        }
         
         // Step 8: Set the ID on quiz for event
         quiz.setQuizId(quizId);
         
         // Step 9: Publish QuizCreatedEvent
-        QuizCreatedEvent event = new QuizCreatedEvent(quiz, createdBy);
+        QuizCreatedEvent event = new QuizCreatedEvent(quizId, lessonId, totalMarks, questions.size() , categories ,createdBy); 
         eventBusService.publish(event);
         
         return quizId;
@@ -128,10 +136,10 @@ public class QuizServiceImpl implements QuizService {
             throw new ValidationException("At least one question is required");
         }
         
-        // Step 4: Calculate new total marks
-        BigDecimal totalMarks = BigDecimal.ZERO;
-        for (QuizQuestion question : questions) {
-            totalMarks = totalMarks.add(question.getPoints());
+        Double totalMarks = 0.0;
+        for(QuizQuestion question : questions)
+        {
+            totalMarks += question.getPoints();
         }
         
         // Step 5: Get existing quiz
@@ -239,10 +247,10 @@ public class QuizServiceImpl implements QuizService {
         }
         
         // Step 10: Calculate total score
-        BigDecimal totalScore = QuizServiceImplHelpers.calculateTotalScore(scores);
+        Double totalScore = QuizServiceImplHelpers.calculateTotalScore(scores);
         
         // Step 11: Publish QuizGradedEvent
-        QuizGradedEvent event = new QuizGradedEvent(quizId, studentId, totalScore, gradedBy);
+        QuizGradedEvent event = new QuizGradedEvent(quizId, studentId, questions ,totalScore, gradedBy);
         eventBusService.publish(event);
         
         return true;
@@ -303,10 +311,10 @@ public class QuizServiceImpl implements QuizService {
                 quizCategoryTotalDAO.bulkInsert(categoryTotals);
                 
                 // Calculate total score
-                BigDecimal totalScore = QuizServiceImplHelpers.calculateTotalScore(scores);
+                Double totalScore = QuizServiceImplHelpers.calculateTotalScore(scores);
                 
                 // Publish individual QuizGradedEvent
-                QuizGradedEvent event = new QuizGradedEvent(quizId, studentId, totalScore, gradedBy);
+                QuizGradedEvent event = new QuizGradedEvent(quizId, studentId, questions ,totalScore, gradedBy);
                 eventBusService.publish(event);
                 
                 studentsGraded++;
@@ -317,14 +325,14 @@ public class QuizServiceImpl implements QuizService {
         }
         
         // Step 4: Publish QuizGradingCompletedEvent
-        QuizGradingCompletedEvent batchEvent = new QuizGradingCompletedEvent(quizId, studentsGraded, gradedBy);
+        QuizGradingCompletedEvent batchEvent = new QuizGradingCompletedEvent(quizId, lessonId ,studentsGraded, gradedBy);
         eventBusService.publish(batchEvent);
         
         return studentsGraded > 0;
     }
     
     @Override
-    public boolean updateQuizScore(Integer scoreId, BigDecimal newPoints) {
+    public boolean updateQuizScore(Integer scoreId, Double newPoints) {
         // Step 1: Get existing score
         QuizScore score = quizScoreDAO.findById(scoreId);
         if (score == null) {
@@ -363,11 +371,11 @@ public class QuizServiceImpl implements QuizService {
         quizCategoryTotalDAO.bulkInsert(categoryTotals);
         
         // Step 6: Calculate new total score
-        BigDecimal totalScore = QuizServiceImplHelpers.calculateTotalScore(allScores);
+        Double totalScore = QuizServiceImplHelpers.calculateTotalScore(allScores);
         
         // Step 7: Publish QuizGradedEvent
         QuizGradedEvent event = new QuizGradedEvent(
-            score.getQuizId(), score.getStudentId(), totalScore, score.getEnteredBy()
+            score.getQuizId(), score.getStudentId(), questions ,totalScore, score.getEnteredBy()
         );
         eventBusService.publish(event);
         
@@ -429,9 +437,9 @@ public class QuizServiceImpl implements QuizService {
     // ========== Helper Methods ==========
     
     @Override
-    public BigDecimal autoGradeMCQ(String studentAnswer, String modelAnswer, BigDecimal maxPoints) {
+    public Double autoGradeMCQ(String studentAnswer, String modelAnswer, Double maxPoints) {
         if (studentAnswer == null || modelAnswer == null) {
-            return BigDecimal.ZERO;
+            return 0.0;
         }
         
         // Case-insensitive comparison
@@ -439,7 +447,7 @@ public class QuizServiceImpl implements QuizService {
             return maxPoints;
         }
         
-        return BigDecimal.ZERO;
+        return 0.0;
     }
     
     /**
@@ -464,7 +472,7 @@ public class QuizServiceImpl implements QuizService {
 // ========== Statistics ==========
 
 @Override
-public BigDecimal getStudentQuizTotal(Integer quizId, Integer studentId) {
+public Double getStudentQuizTotal(Integer quizId, Integer studentId) {
     if (quizId == null || studentId == null) {
         throw new ValidationException("Quiz ID and student ID cannot be null");
     }
@@ -481,28 +489,28 @@ public QuizStatistics getQuizStatistics(Integer quizId) {
     List<QuizScore> allScores = quizScoreDAO.findByQuizId(quizId);
     
     if (allScores == null || allScores.isEmpty()) {
-        return new QuizStatistics(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+        return new QuizStatistics(0.0, 0.0, 0.0, 0.0);
     }
     
     // Group scores by student
-    Map<Integer, BigDecimal> studentTotals = new HashMap<>();
+    Map<Integer, Double> studentTotals = new HashMap<>();
     for (QuizScore score : allScores) {
         Integer studentId = score.getStudentId();
-        BigDecimal currentTotal = studentTotals.getOrDefault(studentId, BigDecimal.ZERO);
-        studentTotals.put(studentId, currentTotal.add(score.getPointsEarned()));
+        Double currentTotal = studentTotals.getOrDefault(studentId, 0.0);
+        studentTotals.put(studentId, currentTotal + score.getPointsEarned());
     }
     
     // Calculate statistics
-    BigDecimal sum = BigDecimal.ZERO;
-    BigDecimal highest = null;
-    BigDecimal lowest = null;
+    Double sum = 0.0;
+    Double highest = null;
+    Double lowest = null;
     int passCount = 0;
     
     Quiz quiz = quizDAO.findById(quizId);
-    BigDecimal passingScore = quiz.getTotalMarks().multiply(new BigDecimal("0.5")); // 50% to pass
+    Double passingScore = quiz.getTotalMarks() * 0.5; // 50% to pass
     
-    for (BigDecimal total : studentTotals.values()) {
-        sum = sum.add(total);
+    for (Double total : studentTotals.values()) {
+        sum = sum + total;
         
         if (highest == null || total.compareTo(highest) > 0) {
             highest = total;
@@ -512,24 +520,22 @@ public QuizStatistics getQuizStatistics(Integer quizId) {
             lowest = total;
         }
         
-        if (total.compareTo(passingScore) >= 0) {
+        if (total > passingScore) {
             passCount++;
         }
     }
     
-    BigDecimal average = sum.divide(
-        new BigDecimal(studentTotals.size()), 2, RoundingMode.HALF_UP
-    );
+    Double average = sum / studentTotals.size();
     
-    BigDecimal passRate = new BigDecimal(passCount)
-        .divide(new BigDecimal(studentTotals.size()), 4, RoundingMode.HALF_UP)
-        .multiply(new BigDecimal("100"));
+    Double passRate = ((double)passCount / studentTotals.size()) * 100;
+
+    
     
     return new QuizStatistics(average, highest, lowest, passRate);
 }
 
 @Override
-public Map<TopicCategory, BigDecimal> getQuizCategoryBreakdown(Integer quizId) {
+public Map<TopicCategory, Double> getQuizCategoryBreakdown(Integer quizId) {
     if (quizId == null) {
         throw new ValidationException("Quiz ID cannot be null");
     }
@@ -537,7 +543,7 @@ public Map<TopicCategory, BigDecimal> getQuizCategoryBreakdown(Integer quizId) {
 }
 
 @Override
-public BigDecimal calculateQuizPoints(Integer studentId) {
+public Double calculateQuizPoints(Integer studentId) {
     if (studentId == null) {
         throw new ValidationException("Student ID cannot be null");
     }
@@ -545,9 +551,9 @@ public BigDecimal calculateQuizPoints(Integer studentId) {
     // Get all quiz scores for student
     List<QuizScore> allScores = quizScoreDAO.findByStudentId(studentId);
     
-    BigDecimal totalPoints = BigDecimal.ZERO;
+    Double totalPoints = 0.0;
     for (QuizScore score : allScores) {
-        totalPoints = totalPoints.add(score.getPointsEarned());
+        totalPoints = totalPoints + score.getPointsEarned();
     }
     
     return totalPoints;

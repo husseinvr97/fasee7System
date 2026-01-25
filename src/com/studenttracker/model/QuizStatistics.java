@@ -1,21 +1,19 @@
 package com.studenttracker.model;
 
-import java.math.BigDecimal;
-
 /**
  * Statistics for quiz performance analysis.
  */
 public class QuizStatistics {
-    private BigDecimal averageScore;
-    private BigDecimal highestScore;
-    private BigDecimal lowestScore;
-    private BigDecimal passRate;
+    private Double averageScore;
+    private Double highestScore;
+    private Double lowestScore;
+    private Double passRate;
     
     // Constructors
     public QuizStatistics() {}
     
-    public QuizStatistics(BigDecimal averageScore, BigDecimal highestScore, 
-                         BigDecimal lowestScore, BigDecimal passRate) {
+    public QuizStatistics(Double averageScore, Double highestScore, 
+                         Double lowestScore, Double passRate) {
         this.averageScore = averageScore;
         this.highestScore = highestScore;
         this.lowestScore = lowestScore;
@@ -23,17 +21,17 @@ public class QuizStatistics {
     }
     
     // Getters and Setters
-    public BigDecimal getAverageScore() { return averageScore; }
-    public void setAverageScore(BigDecimal averageScore) { this.averageScore = averageScore; }
+    public Double getAverageScore() { return averageScore; }
+    public void setAverageScore(Double averageScore) { this.averageScore = averageScore; }
     
-    public BigDecimal getHighestScore() { return highestScore; }
-    public void setHighestScore(BigDecimal highestScore) { this.highestScore = highestScore; }
+    public Double getHighestScore() { return highestScore; }
+    public void setHighestScore(Double highestScore) { this.highestScore = highestScore; }
     
-    public BigDecimal getLowestScore() { return lowestScore; }
-    public void setLowestScore(BigDecimal lowestScore) { this.lowestScore = lowestScore; }
+    public Double getLowestScore() { return lowestScore; }
+    public void setLowestScore(Double lowestScore) { this.lowestScore = lowestScore; }
     
-    public BigDecimal getPassRate() { return passRate; }
-    public void setPassRate(BigDecimal passRate) { this.passRate = passRate; }
+    public Double getPassRate() { return passRate; }
+    public void setPassRate(Double passRate) { this.passRate = passRate; }
     
     @Override
     public String toString() {

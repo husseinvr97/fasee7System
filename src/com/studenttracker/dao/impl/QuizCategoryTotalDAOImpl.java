@@ -2,10 +2,10 @@ package com.studenttracker.dao.impl;
 
 import com.studenttracker.dao.QuizCategoryTotalDAO;
 import com.studenttracker.exception.DAOException;
+import com.studenttracker.model.LessonTopic;
 import com.studenttracker.model.QuizCategoryTotal;
 import com.studenttracker.util.DatabaseConnection;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,8 +28,8 @@ public class QuizCategoryTotalDAOImpl implements QuizCategoryTotalDAO {
             pstmt.setInt(1, total.getQuizId());
             pstmt.setInt(2, total.getStudentId());
             pstmt.setString(3, total.getCategory().name());
-            pstmt.setBigDecimal(4, total.getPointsEarned());
-            pstmt.setBigDecimal(5, total.getTotalPoints());
+            pstmt.setDouble(4, total.getPointsEarned());
+            pstmt.setDouble(5, total.getTotalPoints());
             
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows == 0) {
@@ -57,8 +57,8 @@ public class QuizCategoryTotalDAOImpl implements QuizCategoryTotalDAO {
         try {
             conn = dbConnection.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setBigDecimal(1, total.getPointsEarned());
-            pstmt.setBigDecimal(2, total.getTotalPoints());
+            pstmt.setDouble(1, total.getPointsEarned());
+            pstmt.setDouble(2, total.getTotalPoints());
             pstmt.setInt(3, total.getTotalId());
             
             return pstmt.executeUpdate() > 0;
@@ -194,8 +194,8 @@ public class QuizCategoryTotalDAOImpl implements QuizCategoryTotalDAO {
                 pstmt.setInt(1, total.getQuizId());
                 pstmt.setInt(2, total.getStudentId());
                 pstmt.setString(3, total.getCategory().name());
-                pstmt.setBigDecimal(4, total.getPointsEarned());
-                pstmt.setBigDecimal(5, total.getTotalPoints());
+                pstmt.setDouble(4, total.getPointsEarned());
+                pstmt.setDouble(5, total.getTotalPoints());
                 pstmt.addBatch();
                 
                 count++;
@@ -229,12 +229,12 @@ public class QuizCategoryTotalDAOImpl implements QuizCategoryTotalDAO {
     }
     
     @Override
-    public Map<QuizCategoryTotal.TopicCategory, BigDecimal> getCategoryTotalsForStudent(int studentId) {
-        Map<QuizCategoryTotal.TopicCategory, BigDecimal> categoryTotals = new HashMap<>();
+    public Map<LessonTopic.TopicCategory, Double> getCategoryTotalsForStudent(int studentId) {
+        Map<LessonTopic.TopicCategory, Double> categoryTotals = new HashMap<>();
         
         // Initialize all categories with 0
-        for (QuizCategoryTotal.TopicCategory category : QuizCategoryTotal.TopicCategory.values()) {
-            categoryTotals.put(category, BigDecimal.ZERO);
+        for (LessonTopic.TopicCategory category : LessonTopic.TopicCategory.values()) {
+            categoryTotals.put(category, 0.0);
         }
         
         String sql = "SELECT category, SUM(points_earned) as total FROM quiz_category_totals " +
@@ -247,9 +247,9 @@ public class QuizCategoryTotalDAOImpl implements QuizCategoryTotalDAO {
             ResultSet rs = pstmt.executeQuery();
             
             while (rs.next()) {
-                QuizCategoryTotal.TopicCategory category = 
-                    QuizCategoryTotal.TopicCategory.valueOf(rs.getString("category"));
-                BigDecimal total = rs.getBigDecimal("total");
+                LessonTopic.TopicCategory category = 
+                    LessonTopic.TopicCategory.valueOf(rs.getString("category"));
+                Double total = rs.getDouble("total");
                 categoryTotals.put(category, total);
             }
             
@@ -266,9 +266,9 @@ public class QuizCategoryTotalDAOImpl implements QuizCategoryTotalDAO {
         total.setTotalId(rs.getInt("total_id"));
         total.setQuizId(rs.getInt("quiz_id"));
         total.setStudentId(rs.getInt("student_id"));
-        total.setCategory(QuizCategoryTotal.TopicCategory.valueOf(rs.getString("category")));
-        total.setPointsEarned(rs.getBigDecimal("points_earned"));
-        total.setTotalPoints(rs.getBigDecimal("total_points"));
+        total.setCategory(LessonTopic.TopicCategory.valueOf(rs.getString("category")));
+        total.setPointsEarned(rs.getDouble("points_earned"));
+        total.setTotalPoints(rs.getDouble("total_points"));
         return total;
     }
 }

@@ -6,8 +6,6 @@ import com.studenttracker.model.QuizQuestion;
 import com.studenttracker.model.QuizScore;
 import com.studenttracker.model.LessonTopic;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 /**
@@ -28,13 +26,13 @@ public class PerformanceAnalysisServiceImplHelpers {
      * @param maxPoints Maximum possible points
      * @return Array: [correctCount, wrongCount]
      */
-    public static double[] getEssayCorrectWrongCount(BigDecimal pointsEarned, BigDecimal maxPoints) {
-        if (maxPoints == null || maxPoints.compareTo(BigDecimal.ZERO) == 0) {
+    public static double[] getEssayCorrectWrongCount(Double pointsEarned, Double maxPoints) {
+        if (maxPoints == null || maxPoints == 0) {
             return new double[]{0.0, 0.0};
         }
         
         // Calculate proportion: pointsEarned / maxPoints
-        BigDecimal proportion = pointsEarned.divide(maxPoints, 4, RoundingMode.HALF_UP);
+        Double proportion = pointsEarned / maxPoints;
         
         double correctCount = proportion.doubleValue();
         double wrongCount = 1.0 - correctCount;

@@ -5,7 +5,6 @@ import com.studenttracker.exception.DAOException;
 import com.studenttracker.model.Quiz;
 import com.studenttracker.util.DatabaseConnection;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -216,7 +215,7 @@ public class QuizDAOImpl implements QuizDAO {
         quiz.setQuizPdfData(rs.getBytes("quiz_pdf_path"));
         
         String totalMarks = rs.getString("total_marks");
-        quiz.setTotalMarks(totalMarks != null ? new BigDecimal(totalMarks) : BigDecimal.ZERO);
+        quiz.setTotalMarks(totalMarks != null ? Double.valueOf(totalMarks) : 0.0);
         
         String createdAt = rs.getString("created_at");
         quiz.setCreatedAt(createdAt != null ? LocalDateTime.parse(createdAt) : null);

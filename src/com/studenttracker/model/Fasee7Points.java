@@ -1,23 +1,22 @@
 package com.studenttracker.model;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Fasee7Points {
     private Integer pointsId;
     private Integer studentId;
-    private BigDecimal quizPoints;
+    private Double quizPoints;
     private int attendancePoints;
     private int homeworkPoints;
     private int targetPoints;
-    private BigDecimal totalPoints;
+    private Double totalPoints;
     private LocalDateTime lastUpdated;
 
     public Fasee7Points() {
     }
 
-    public Fasee7Points(Integer studentId, BigDecimal quizPoints, int attendancePoints, 
-                        int homeworkPoints, int targetPoints, BigDecimal totalPoints, 
+    public Fasee7Points(Integer studentId, Double quizPoints, int attendancePoints, 
+                        int homeworkPoints, int targetPoints, Double totalPoints, 
                         LocalDateTime lastUpdated) {
         this.studentId = studentId;
         this.quizPoints = quizPoints;
@@ -44,11 +43,11 @@ public class Fasee7Points {
         this.studentId = studentId;
     }
 
-    public BigDecimal getQuizPoints() {
+    public Double getQuizPoints() {
         return quizPoints;
     }
 
-    public void setQuizPoints(BigDecimal quizPoints) {
+    public void setQuizPoints(Double quizPoints) {
         this.quizPoints = quizPoints;
     }
 
@@ -76,11 +75,11 @@ public class Fasee7Points {
         this.targetPoints = targetPoints;
     }
 
-    public BigDecimal getTotalPoints() {
+    public Double getTotalPoints() {
         return totalPoints;
     }
 
-    public void setTotalPoints(BigDecimal totalPoints) {
+    public void setTotalPoints(Double totalPoints) {
         this.totalPoints = totalPoints;
     }
 
@@ -93,10 +92,7 @@ public class Fasee7Points {
     }
 
     public void recalculateTotal() {
-        this.totalPoints = quizPoints
-                .add(BigDecimal.valueOf(attendancePoints))
-                .add(BigDecimal.valueOf(homeworkPoints))
-                .add(BigDecimal.valueOf(targetPoints));
+        this.totalPoints = quizPoints + attendancePoints + homeworkPoints + targetPoints;
         this.lastUpdated = LocalDateTime.now();
     }
 

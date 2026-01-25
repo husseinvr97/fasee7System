@@ -3,7 +3,6 @@ package com.studenttracker.dao;
 import com.studenttracker.model.LessonTopic.TopicCategory;
 import com.studenttracker.model.QuizQuestion;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +21,6 @@ public interface QuizQuestionDAO {
     // Custom query methods
     List<QuizQuestion> findByQuizId(int quizId);
     boolean bulkInsert(List<QuizQuestion> questions);
-    Map<TopicCategory, BigDecimal> getCategoryTotalsByQuiz(int quizId);
+    Map<TopicCategory, Double> getCategoryTotalsByQuiz(int quizId);
     boolean deleteByQuizId(int quizId);
 }

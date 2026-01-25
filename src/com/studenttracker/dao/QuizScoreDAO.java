@@ -1,6 +1,6 @@
 package com.studenttracker.dao;
 
-import java.math.BigDecimal;
+
 import java.util.List;
 
 import com.studenttracker.model.QuizScore;
@@ -23,5 +23,5 @@ public interface QuizScoreDAO {
     List<QuizScore> findByStudentId(int studentId);
     List<QuizScore> findByQuizAndStudent(int quizId, int studentId);
     boolean bulkInsert(List<QuizScore> scores);
-    BigDecimal getTotalScoreForStudent(int quizId, int studentId);
+    Double getTotalScoreForStudent(int quizId, int studentId);
 }

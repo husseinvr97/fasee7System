@@ -1,37 +1,41 @@
 package com.studenttracker.service.event;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.List;
+
+import com.studenttracker.model.QuizQuestion;
 
 /**
  * Event published when a student's quiz is graded.
  */
 public class QuizGradedEvent implements Event {
-    private Integer quizId;
-    private Integer studentId;
-    private BigDecimal totalScore;
-    private Integer gradedBy;
-    private LocalDateTime timestamp;
+    private final Integer quizId;
+    private final Integer studentId;
+    private final List<QuizQuestion> questions;
+    private final Double pointsEarned;
+    private final Integer enteredBy;
     
-    public QuizGradedEvent(Integer quizId, Integer studentId, 
-                          BigDecimal totalScore, Integer gradedBy) {
+    public QuizGradedEvent(Integer quizId, Integer studentId, List<QuizQuestion> questions, Double pointsEarned, Integer enteredBy) {
         this.quizId = quizId;
         this.studentId = studentId;
-        this.totalScore = totalScore;
-        this.gradedBy = gradedBy;
-        this.timestamp = LocalDateTime.now();
+        this.questions = questions;
+        this.pointsEarned = pointsEarned;
+        this.enteredBy = enteredBy;
     }
     
-    // Getters
     public Integer getQuizId() { return quizId; }
     public Integer getStudentId() { return studentId; }
-    public BigDecimal getTotalScore() { return totalScore; }
-    public Integer getGradedBy() { return gradedBy; }
-    public LocalDateTime getTimestamp() { return timestamp; }
+    public List<QuizQuestion> getQuestionId() { return questions; }
+    public Double getPointsEarned() { return pointsEarned; }
+    public Integer getEnteredBy() { return enteredBy; }
     
     @Override
     public String toString() {
-        return "QuizGradedEvent{quiz=" + quizId + ", student=" + studentId + 
-               ", score=" + totalScore + "}";
+        return "QuizGradedEvent{" +
+                "quizId=" + quizId +
+                ", studentId=" + studentId +
+                ", questions=" + questions +
+                ", pointsEarned=" + pointsEarned +
+                ", enteredBy=" + enteredBy +
+                '}';
     }
 }

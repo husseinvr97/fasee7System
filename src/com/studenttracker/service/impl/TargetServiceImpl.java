@@ -3,7 +3,6 @@ package com.studenttracker.service.impl;
 import com.google.common.eventbus.Subscribe;
 import com.studenttracker.dao.TargetDAO;
 import com.studenttracker.dao.TargetAchievementStreakDAO;
-import com.studenttracker.dao.PerformanceIndicatorDAO;
 import com.studenttracker.model.Target;
 import com.studenttracker.model.Target.TopicCategory;
 import com.studenttracker.model.TargetAchievementStreak;
@@ -24,7 +23,6 @@ public class TargetServiceImpl implements TargetService {
     
     private final TargetDAO targetDAO;
     private final TargetAchievementStreakDAO streakDAO;
-    private final PerformanceIndicatorDAO piDAO;
     private final EventBusService eventBusService;
     
     /**
@@ -33,11 +31,9 @@ public class TargetServiceImpl implements TargetService {
      */
     public TargetServiceImpl(TargetDAO targetDAO,
                             TargetAchievementStreakDAO streakDAO,
-                            PerformanceIndicatorDAO piDAO,
                             EventBusService eventBus) {
         this.targetDAO = targetDAO;
         this.streakDAO = streakDAO;
-        this.piDAO = piDAO;
         this.eventBusService = eventBus;
         
         // Register as event subscriber

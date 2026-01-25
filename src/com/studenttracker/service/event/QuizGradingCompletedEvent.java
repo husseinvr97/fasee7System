@@ -1,32 +1,34 @@
 package com.studenttracker.service.event;
 
-import java.time.LocalDateTime;
 
 /**
  * Event published when bulk quiz grading is completed.
  */
 public class QuizGradingCompletedEvent implements Event {
-    private Integer quizId;
-    private int studentsGraded;
-    private Integer gradedBy;
-    private LocalDateTime timestamp;
+    private final Integer quizId;
+    private final Integer lessonId;
+    private final Integer totalStudentsGraded;
+    private final Integer completedBy;
     
-    public QuizGradingCompletedEvent(Integer quizId, int studentsGraded, Integer gradedBy) {
+    public QuizGradingCompletedEvent(Integer quizId, Integer lessonId, Integer totalStudentsGraded, Integer completedBy) {
         this.quizId = quizId;
-        this.studentsGraded = studentsGraded;
-        this.gradedBy = gradedBy;
-        this.timestamp = LocalDateTime.now();
+        this.lessonId = lessonId;
+        this.totalStudentsGraded = totalStudentsGraded;
+        this.completedBy = completedBy;
     }
     
-    // Getters
     public Integer getQuizId() { return quizId; }
-    public int getStudentsGraded() { return studentsGraded; }
-    public Integer getGradedBy() { return gradedBy; }
-    public LocalDateTime getTimestamp() { return timestamp; }
+    public Integer getLessonId() { return lessonId; }
+    public Integer getTotalStudentsGraded() { return totalStudentsGraded; }
+    public Integer getCompletedBy() { return completedBy; }
     
     @Override
     public String toString() {
-        return "QuizGradingCompletedEvent{quiz=" + quizId + 
-               ", studentsGraded=" + studentsGraded + "}";
+        return "QuizGradingCompletedEvent{" +
+                "quizId=" + quizId +
+                ", lessonId=" + lessonId +
+                ", totalStudentsGraded=" + totalStudentsGraded +
+                ", completedBy=" + completedBy +
+                '}';
     }
 }

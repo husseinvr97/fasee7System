@@ -8,7 +8,7 @@ public class TargetCreatedEvent implements Event {
     private final Integer studentId;
     private final TopicCategory category;
     private final int targetPiValue;
-    private final LocalDateTime createdAt;
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     public TargetCreatedEvent(Integer targetId, Integer studentId, TopicCategory category,
                              int targetPiValue, LocalDateTime createdAt) {
@@ -16,7 +16,6 @@ public class TargetCreatedEvent implements Event {
         this.studentId = studentId;
         this.category = category;
         this.targetPiValue = targetPiValue;
-        this.createdAt = createdAt;
     }
 
     public Integer getTargetId() {

@@ -1,6 +1,5 @@
 package com.studenttracker.model;
 
-import java.math.BigDecimal;
 
 public class QuizQuestion {
     private Integer questionId;
@@ -8,7 +7,7 @@ public class QuizQuestion {
     private int questionNumber;
     private QuestionType questionType;
     private LessonTopic.TopicCategory category;
-    private BigDecimal points;
+    private Double points;
     private String modelAnswer;       // For MCQ: "A", "B", "C", "D"; NULL for Essay
     
     public enum QuestionType {
@@ -19,7 +18,7 @@ public class QuizQuestion {
     public QuizQuestion() {}
     
     public QuizQuestion(Integer quizId, int questionNumber, QuestionType questionType, 
-                       LessonTopic.TopicCategory category, BigDecimal points, String modelAnswer) {
+                       LessonTopic.TopicCategory category, Double points, String modelAnswer) {
         this.quizId = quizId;
         this.questionNumber = questionNumber;
         this.questionType = questionType;
@@ -44,8 +43,8 @@ public class QuizQuestion {
     public LessonTopic.TopicCategory getCategory() { return category; }
     public void setCategory(LessonTopic.TopicCategory category) { this.category = category; }
     
-    public BigDecimal getPoints() { return points; }
-    public void setPoints(BigDecimal points) { this.points = points; }
+    public Double getPoints() { return points; }
+    public void setPoints(Double points) { this.points = points; }
     
     public String getModelAnswer() { return modelAnswer; }
     public void setModelAnswer(String modelAnswer) { this.modelAnswer = modelAnswer; }

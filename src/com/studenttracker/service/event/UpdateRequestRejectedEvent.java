@@ -7,26 +7,33 @@ import java.time.LocalDateTime;
  */
 public class UpdateRequestRejectedEvent implements Event {
     private final Integer requestId;
+    private final String requestType;
     private final Integer rejectedBy;
     private final String reason;
-    private final LocalDateTime rejectedAt;
+    private final LocalDateTime rejectedAt = LocalDateTime.now();
     
     public UpdateRequestRejectedEvent(Integer requestId, Integer rejectedBy, 
-                                     String reason, LocalDateTime rejectedAt) {
+                                     String reason, String requestType) {
         this.requestId = requestId;
         this.rejectedBy = rejectedBy;
         this.reason = reason;
-        this.rejectedAt = rejectedAt;
+        this.requestType = requestType;
     }
     
     public Integer getRequestId() { return requestId; }
     public Integer getRejectedBy() { return rejectedBy; }
     public String getReason() { return reason; }
     public LocalDateTime getRejectedAt() { return rejectedAt; }
+    public String getRequestType() { return requestType; }
     
     @Override
     public String toString() {
-        return "UpdateRequestRejectedEvent{requestId=" + requestId + 
-               ", rejectedBy=" + rejectedBy + ", reason=" + reason + "}";
+        return "UpdateRequestRejectedEvent{" +
+                "requestId=" + requestId +
+                ", requestType='" + requestType + '\'' +
+                ", rejectedBy=" + rejectedBy +
+                ", reason='" + reason + '\'' +
+                ", rejectedAt=" + rejectedAt +
+                '}';
     }
 }

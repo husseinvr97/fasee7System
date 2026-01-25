@@ -7,7 +7,6 @@ import com.studenttracker.model.QuizQuestion;
 import com.studenttracker.model.QuizQuestion.QuestionType;
 import com.studenttracker.util.DatabaseConnection;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -231,7 +230,7 @@ public class QuizQuestionDAOImpl implements QuizQuestionDAO {
     }
     
     @Override
-    public Map<TopicCategory, BigDecimal> getCategoryTotalsByQuiz(int quizId) {
+    public Map<TopicCategory, Double> getCategoryTotalsByQuiz(int quizId) {
         String sql = "SELECT category, SUM(points) as total FROM quiz_questions WHERE quiz_id = ? GROUP BY category";
         
         Connection conn = null;
@@ -241,11 +240,11 @@ public class QuizQuestionDAOImpl implements QuizQuestionDAO {
             pstmt.setInt(1, quizId);
             
             ResultSet rs = pstmt.executeQuery();
-            Map<TopicCategory, BigDecimal> categoryTotals = new HashMap<>();
+            Map<TopicCategory, Double> categoryTotals = new HashMap<>();
             
             while (rs.next()) {
                 TopicCategory category = TopicCategory.valueOf(rs.getString("category"));
-                BigDecimal total = new BigDecimal(rs.getString("total"));
+                Double total = Double.parseDouble(rs.getString("total"));
                 categoryTotals.put(category, total);
             }
             
@@ -288,7 +287,7 @@ public class QuizQuestionDAOImpl implements QuizQuestionDAO {
         question.setCategory(TopicCategory.valueOf(rs.getString("category")));
         
         String points = rs.getString("points");
-        question.setPoints(points != null ? new BigDecimal(points) : BigDecimal.ZERO);
+        question.setPoints(points != null ? Double.valueOf(points) : 0.0);
         
         question.setModelAnswer(rs.getString("model_answer"));
         
