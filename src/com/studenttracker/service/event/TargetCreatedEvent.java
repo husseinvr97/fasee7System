@@ -1,6 +1,6 @@
 package com.studenttracker.service.event;
 
-import com.studenttracker.model.Target.TopicCategory;
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 import java.time.LocalDateTime;
 
 public class TargetCreatedEvent implements Event {

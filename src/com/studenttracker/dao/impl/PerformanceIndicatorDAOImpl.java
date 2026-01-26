@@ -4,7 +4,7 @@ import com.studenttracker.dao.PerformanceIndicatorDAO;
 import com.studenttracker.dao.impl.helpers.PerformanceIndicatorDAOImplHelpers;
 import com.studenttracker.exception.DAOException;
 import com.studenttracker.model.PerformanceIndicator;
-import com.studenttracker.model.PerformanceIndicator.TopicCategory;
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 import com.studenttracker.util.DatabaseConnection;
 import com.studenttracker.util.ResultSetExtractor;
 

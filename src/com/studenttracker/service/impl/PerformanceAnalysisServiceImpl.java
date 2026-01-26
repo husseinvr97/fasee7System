@@ -14,6 +14,7 @@ import com.studenttracker.service.event.PerformanceIndicatorCalculatedEvent;
 import com.studenttracker.service.event.PerformanceDegradationDetectedEvent;
 import com.studenttracker.service.event.PerformanceImprovementDetectedEvent;
 import com.studenttracker.service.impl.helpers.PerformanceAnalysisServiceImplHelpers;
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -73,7 +74,7 @@ public class PerformanceAnalysisServiceImpl implements PerformanceAnalysisServic
             LessonTopic.TopicCategory lessonCategory = entry.getKey();
             
             // Convert LessonTopic.TopicCategory to PerformanceIndicator.TopicCategory
-            PerformanceIndicator.TopicCategory piCategory = 
+            TopicCategory piCategory = 
                 PerformanceAnalysisServiceImplHelpers.convertToPerformanceCategory(lessonCategory);
             
             if (piCategory == null) {
@@ -190,25 +191,25 @@ public class PerformanceAnalysisServiceImpl implements PerformanceAnalysisServic
     
     @Override
     public List<PerformanceIndicator> getStudentPIByCategory(Integer studentId, 
-                                                             PerformanceIndicator.TopicCategory category) {
+                                                             TopicCategory category) {
         return performanceIndicatorDAO.findByStudentAndCategory(studentId, category);
     }
     
     @Override
     public PerformanceIndicator getLatestPI(Integer studentId, 
-                                           PerformanceIndicator.TopicCategory category) {
+                                           TopicCategory category) {
         return performanceIndicatorDAO.findLatestByStudentAndCategory(studentId, category);
     }
     
     @Override
     public int getCurrentCumulativePI(Integer studentId, 
-                                     PerformanceIndicator.TopicCategory category) {
+                                     TopicCategory category) {
         PerformanceIndicator latest = getLatestPI(studentId, category);
         return (latest != null) ? latest.getCumulativePi() : 0;
     }
     
     @Override
-    public Map<PerformanceIndicator.TopicCategory, Integer> getAllCategoryPIs(Integer studentId) {
+    public Map<TopicCategory, Integer> getAllCategoryPIs(Integer studentId) {
         return performanceIndicatorDAO.getCurrentPIsByStudent(studentId);
     }
     
@@ -217,14 +218,14 @@ public class PerformanceAnalysisServiceImpl implements PerformanceAnalysisServic
     
     @Override
     public PerformanceTrend getPerformanceTrend(Integer studentId, 
-                                               PerformanceIndicator.TopicCategory category) {
+                                               TopicCategory category) {
         List<PerformanceIndicator> piHistory = getStudentPIByCategory(studentId, category);
         return PerformanceAnalysisServiceImplHelpers.analyzeTrend(piHistory);
     }
     
     @Override
     public int calculateOverallPI(Integer studentId) {
-        Map<PerformanceIndicator.TopicCategory, Integer> categoryPIs = getAllCategoryPIs(studentId);
+        Map<TopicCategory, Integer> categoryPIs = getAllCategoryPIs(studentId);
         
         int total = 0;
         for (Integer pi : categoryPIs.values()) {
@@ -235,8 +236,8 @@ public class PerformanceAnalysisServiceImpl implements PerformanceAnalysisServic
     }
     
     @Override
-    public List<PerformanceIndicator.TopicCategory> getWeakCategories(Integer studentId) {
-        Map<PerformanceIndicator.TopicCategory, Integer> categoryPIs = getAllCategoryPIs(studentId);
+    public List<TopicCategory> getWeakCategories(Integer studentId) {
+        Map<TopicCategory, Integer> categoryPIs = getAllCategoryPIs(studentId);
         
         if (categoryPIs.isEmpty()) {
             return new ArrayList<>();
@@ -244,8 +245,8 @@ public class PerformanceAnalysisServiceImpl implements PerformanceAnalysisServic
         
         double average = PerformanceAnalysisServiceImplHelpers.calculateAveragePI(categoryPIs);
         
-        List<PerformanceIndicator.TopicCategory> weakCategories = new ArrayList<>();
-        for (Map.Entry<PerformanceIndicator.TopicCategory, Integer> entry : categoryPIs.entrySet()) {
+        List<TopicCategory> weakCategories = new ArrayList<>();
+        for (Map.Entry<TopicCategory, Integer> entry : categoryPIs.entrySet()) {
             if (entry.getValue() < average) {
                 weakCategories.add(entry.getKey());
             }
@@ -255,8 +256,8 @@ public class PerformanceAnalysisServiceImpl implements PerformanceAnalysisServic
     }
     
     @Override
-    public List<PerformanceIndicator.TopicCategory> getStrongCategories(Integer studentId) {
-        Map<PerformanceIndicator.TopicCategory, Integer> categoryPIs = getAllCategoryPIs(studentId);
+    public List<TopicCategory> getStrongCategories(Integer studentId) {
+        Map<TopicCategory, Integer> categoryPIs = getAllCategoryPIs(studentId);
         
         if (categoryPIs.isEmpty()) {
             return new ArrayList<>();
@@ -264,8 +265,8 @@ public class PerformanceAnalysisServiceImpl implements PerformanceAnalysisServic
         
         double average = PerformanceAnalysisServiceImplHelpers.calculateAveragePI(categoryPIs);
         
-        List<PerformanceIndicator.TopicCategory> strongCategories = new ArrayList<>();
-        for (Map.Entry<PerformanceIndicator.TopicCategory, Integer> entry : categoryPIs.entrySet()) {
+        List<TopicCategory> strongCategories = new ArrayList<>();
+        for (Map.Entry<TopicCategory, Integer> entry : categoryPIs.entrySet()) {
             if (entry.getValue() > average) {
                 strongCategories.add(entry.getKey());
             }
@@ -279,7 +280,7 @@ public class PerformanceAnalysisServiceImpl implements PerformanceAnalysisServic
     
     @Override
     public Map<Integer, Integer> getPIProgressionByCategory(Integer studentId, 
-                                                            PerformanceIndicator.TopicCategory category) {
+                                                            TopicCategory category) {
         List<PerformanceIndicator> piHistory = getStudentPIByCategory(studentId, category);
         
         Map<Integer, Integer> progression = new LinkedHashMap<>();

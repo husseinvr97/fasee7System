@@ -4,7 +4,7 @@ import com.studenttracker.dao.TargetDAO;
 import com.studenttracker.dao.impl.helpers.TargetDAOImplHelpers;
 import com.studenttracker.exception.DAOException;
 import com.studenttracker.model.Target;
-import com.studenttracker.model.Target.TopicCategory;
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 import com.studenttracker.util.DatabaseConnection;
 
 import java.sql.Connection;

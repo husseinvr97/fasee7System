@@ -2,16 +2,10 @@ package com.studenttracker.model;
 
 import java.time.LocalDateTime;
 
+import com.studenttracker.model.LessonTopic.TopicCategory;
+
 public class PerformanceIndicator {
-    // Reusing TopicCategory enum - should match the one from LessonTopic/QuizCategoryTotal
-    public enum TopicCategory {
-        MATH,
-        SCIENCE,
-        ENGLISH,
-        HISTORY,
-        PROGRAMMING,
-        OTHER
-    }
+    
 
     private Integer piId;
     private Integer studentId;

@@ -4,7 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import com.studenttracker.dao.TargetDAO;
 import com.studenttracker.dao.TargetAchievementStreakDAO;
 import com.studenttracker.model.Target;
-import com.studenttracker.model.Target.TopicCategory;
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 import com.studenttracker.model.TargetAchievementStreak;
 import com.studenttracker.service.EventBusService;
 import com.studenttracker.service.TargetService;
@@ -51,7 +51,7 @@ public class TargetServiceImpl implements TargetService {
     public void onPerformanceDegradation(PerformanceDegradationDetectedEvent event) {
         generateTargetsOnDegradation(
             event.getStudentId(),
-            com.studenttracker.model.Target.TopicCategory.valueOf(event.getCategory().name()),
+            com.studenttracker.model.LessonTopic.TopicCategory.valueOf(event.getCategory().name()),
             event.getPreviousPi(),
             event.getCurrentPi()
         );
@@ -65,7 +65,7 @@ public class TargetServiceImpl implements TargetService {
     public void onPerformanceImprovement(PerformanceImprovementDetectedEvent event) {
         checkAndAchieveTargets(
             event.getStudentId(),
-            com.studenttracker.model.Target.TopicCategory.valueOf(event.getCategory().name()),
+            com.studenttracker.model.LessonTopic.TopicCategory.valueOf(event.getCategory().name()),
             event.getCurrentPi()
         );
     }

@@ -1,7 +1,7 @@
 // ========== PerformanceSummary.java ==========
 package com.studenttracker.model;
 
-import com.studenttracker.model.PerformanceIndicator.TopicCategory;
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 import java.util.Map;
 
 public class PerformanceSummary {

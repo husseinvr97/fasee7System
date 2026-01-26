@@ -1,6 +1,6 @@
 package com.studenttracker.service.event;
 
-import com.studenttracker.model.PerformanceIndicator.TopicCategory;
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 import java.time.LocalDateTime;
 
 public class PerformanceIndicatorCalculatedEvent implements Event {

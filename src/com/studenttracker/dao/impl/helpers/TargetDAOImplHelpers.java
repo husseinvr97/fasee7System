@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.studenttracker.model.Target;
-import com.studenttracker.model.Target.TopicCategory;
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 import com.studenttracker.util.ResultSetExtractor;
 
 public class TargetDAOImplHelpers {

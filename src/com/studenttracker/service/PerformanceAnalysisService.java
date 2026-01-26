@@ -1,7 +1,7 @@
 package com.studenttracker.service;
 
+import com.studenttracker.model.LessonTopic;
 import com.studenttracker.model.PerformanceIndicator;
-import com.studenttracker.model.PerformanceIndicator.TopicCategory;
 import com.studenttracker.model.PerformanceTrend;
 
 import java.util.List;
@@ -50,7 +50,7 @@ public interface PerformanceAnalysisService {
      * @param category Topic category
      * @return List of performance indicators for the category
      */
-    List<PerformanceIndicator> getStudentPIByCategory(Integer studentId, TopicCategory category);
+    List<PerformanceIndicator> getStudentPIByCategory(Integer studentId,  LessonTopic.TopicCategory category);
     
     /**
      * Get the most recent PI for a category.
@@ -59,7 +59,7 @@ public interface PerformanceAnalysisService {
      * @param category Topic category
      * @return Latest PerformanceIndicator or null if none exists
      */
-    PerformanceIndicator getLatestPI(Integer studentId, TopicCategory category);
+    PerformanceIndicator getLatestPI(Integer studentId,  LessonTopic.TopicCategory category);
     
     /**
      * Get current cumulative PI for a category.
@@ -68,7 +68,7 @@ public interface PerformanceAnalysisService {
      * @param category Topic category
      * @return Cumulative PI value (0 if no data)
      */
-    int getCurrentCumulativePI(Integer studentId, TopicCategory category);
+    int getCurrentCumulativePI(Integer studentId,  LessonTopic.TopicCategory category);
     
     /**
      * Get current cumulative PI for all categories.
@@ -76,7 +76,7 @@ public interface PerformanceAnalysisService {
      * @param studentId Student ID
      * @return Map of category to cumulative PI
      */
-    Map<TopicCategory, Integer> getAllCategoryPIs(Integer studentId);
+    Map< LessonTopic.TopicCategory, Integer> getAllCategoryPIs(Integer studentId);
     
     
     // ========== Analysis ==========
@@ -88,7 +88,7 @@ public interface PerformanceAnalysisService {
      * @param category Topic category
      * @return PerformanceTrend (IMPROVING, DEGRADING, STABLE)
      */
-    PerformanceTrend getPerformanceTrend(Integer studentId, TopicCategory category);
+    PerformanceTrend getPerformanceTrend(Integer studentId,  LessonTopic.TopicCategory category);
     
     /**
      * Calculate overall PI across all categories.
@@ -104,7 +104,7 @@ public interface PerformanceAnalysisService {
      * @param studentId Student ID
      * @return List of weak categories
      */
-    List<TopicCategory> getWeakCategories(Integer studentId);
+    List< LessonTopic.TopicCategory> getWeakCategories(Integer studentId);
     
     /**
      * Identify strong categories (above average PI).
@@ -112,7 +112,7 @@ public interface PerformanceAnalysisService {
      * @param studentId Student ID
      * @return List of strong categories
      */
-    List<TopicCategory> getStrongCategories(Integer studentId);
+    List< LessonTopic.TopicCategory> getStrongCategories(Integer studentId);
     
     
     // ========== Charts/UI Data ==========
@@ -124,7 +124,7 @@ public interface PerformanceAnalysisService {
      * @param category Topic category
      * @return Map of quiz_id to cumulative_pi
      */
-    Map<Integer, Integer> getPIProgressionByCategory(Integer studentId, TopicCategory category);
+    Map<Integer, Integer> getPIProgressionByCategory(Integer studentId,  LessonTopic.TopicCategory category);
     
     /**
      * Get overall PI progression over all quizzes.

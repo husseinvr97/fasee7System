@@ -1,17 +1,9 @@
 package com.studenttracker.model;
-
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 import java.time.LocalDateTime;
 
 public class Target {
-    // Reusing TopicCategory enum
-    public enum TopicCategory {
-        MATH,
-        SCIENCE,
-        ENGLISH,
-        HISTORY,
-        PROGRAMMING,
-        OTHER
-    }
+    
 
     private Integer targetId;
     private Integer studentId;

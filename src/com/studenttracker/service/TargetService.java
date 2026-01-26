@@ -1,7 +1,7 @@
 package com.studenttracker.service;
 
 import com.studenttracker.model.Target;
-import com.studenttracker.model.Target.TopicCategory;
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 import com.studenttracker.model.TargetAchievementStreak;
 
 import java.util.List;

@@ -8,7 +8,7 @@ import com.studenttracker.model.*;
 import com.studenttracker.model.Attendance.AttendanceStatus;
 import com.studenttracker.model.BehavioralIncident.IncidentType;
 import com.studenttracker.model.Homework.HomeworkStatus;
-import com.studenttracker.model.PerformanceIndicator.TopicCategory;
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 import com.studenttracker.model.Student.StudentStatus;
 import com.studenttracker.service.*;
 import com.studenttracker.service.event.MonthlyReportDeletedEvent;

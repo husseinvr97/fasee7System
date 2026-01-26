@@ -1,7 +1,7 @@
 package com.studenttracker.dao;
 
 import com.studenttracker.model.Target;
-import com.studenttracker.model.Target.TopicCategory;
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 import java.util.List;
 
 public interface TargetDAO {

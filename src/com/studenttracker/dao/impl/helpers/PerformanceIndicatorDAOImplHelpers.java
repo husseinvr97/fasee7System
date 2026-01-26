@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 
-import com.studenttracker.model.PerformanceIndicator.TopicCategory;
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 
 public class PerformanceIndicatorDAOImplHelpers {
     

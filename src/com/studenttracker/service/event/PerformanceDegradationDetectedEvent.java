@@ -1,15 +1,15 @@
 package com.studenttracker.service.event;
 
-import com.studenttracker.model.PerformanceIndicator.TopicCategory;
+import com.studenttracker.model.LessonTopic;
 
 public class PerformanceDegradationDetectedEvent implements Event {
     private final Integer studentId;
-    private final TopicCategory category;
+    private final  LessonTopic.TopicCategory category;
     private final int previousPi;
     private final int currentPi;
     private final int degradationAmount;
 
-    public PerformanceDegradationDetectedEvent(Integer studentId, TopicCategory category,
+    public PerformanceDegradationDetectedEvent(Integer studentId,  LessonTopic.TopicCategory category,
                                                int previousPi, int currentPi, 
                                                int degradationAmount) {
         this.studentId = studentId;
@@ -23,7 +23,7 @@ public class PerformanceDegradationDetectedEvent implements Event {
         return studentId;
     }
 
-    public TopicCategory getCategory() {
+    public  LessonTopic.TopicCategory getCategory() {
         return category;
     }
 

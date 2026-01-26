@@ -1,7 +1,7 @@
 package com.studenttracker.dao;
 
+import com.studenttracker.model.LessonTopic;
 import com.studenttracker.model.PerformanceIndicator;
-import com.studenttracker.model.PerformanceIndicator.TopicCategory;
 
 import java.util.List;
 import java.util.Map;
@@ -59,7 +59,7 @@ public interface PerformanceIndicatorDAO {
      * @param category Topic category
      * @return List of performance indicators for the category
      */
-    List<PerformanceIndicator> findByStudentAndCategory(int studentId, TopicCategory category);
+    List<PerformanceIndicator> findByStudentAndCategory(int studentId,  LessonTopic.TopicCategory category);
     
     /**
      * Get the most recent performance indicator for a specific student and category.
@@ -67,14 +67,14 @@ public interface PerformanceIndicatorDAO {
      * @param category Topic category
      * @return Latest PerformanceIndicator or null if none exists
      */
-    PerformanceIndicator findLatestByStudentAndCategory(int studentId, TopicCategory category);
+    PerformanceIndicator findLatestByStudentAndCategory(int studentId,  LessonTopic.TopicCategory category);
     
     /**
      * Get the current (latest) cumulative PI for each category for a student.
      * @param studentId Student ID
      * @return Map of category to cumulative PI value
      */
-    Map<TopicCategory, Integer> getCurrentPIsByStudent(int studentId);
+    Map< LessonTopic.TopicCategory, Integer> getCurrentPIsByStudent(int studentId);
     
     /**
      * Get all performance indicators calculated from a specific quiz.

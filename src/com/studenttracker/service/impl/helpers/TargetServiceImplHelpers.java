@@ -4,7 +4,7 @@ import com.studenttracker.dao.TargetDAO;
 import com.studenttracker.dao.TargetAchievementStreakDAO;
 import com.studenttracker.exception.ValidationException;
 import com.studenttracker.model.Target;
-import com.studenttracker.model.Target.TopicCategory;
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 import com.studenttracker.model.TargetAchievementStreak;
 import com.studenttracker.service.TargetService;
 

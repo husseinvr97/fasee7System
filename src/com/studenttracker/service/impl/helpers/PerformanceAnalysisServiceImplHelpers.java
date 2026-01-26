@@ -5,6 +5,9 @@ import com.studenttracker.model.PerformanceTrend;
 import com.studenttracker.model.QuizQuestion;
 import com.studenttracker.model.QuizScore;
 import com.studenttracker.model.LessonTopic;
+import com.studenttracker.model.LessonTopic.TopicCategory;
+
+import static com.studenttracker.model.LessonTopic.TopicCategory;
 
 import java.util.*;
 
@@ -135,14 +138,14 @@ public class PerformanceAnalysisServiceImplHelpers {
         
         double olderAvg = 0.0;
         for (int i = 0; i < midpoint; i++) {
-            olderAvg += piHistory.get(i).getPiValue();
+            olderAvg += piHistory.get(i).getCumulativePi();
         }
         olderAvg /= midpoint;
         
         double recentAvg = 0.0;
         int recentCount = piHistory.size() - midpoint;
         for (int i = midpoint; i < piHistory.size(); i++) {
-            recentAvg += piHistory.get(i).getPiValue();
+            recentAvg += piHistory.get(i).getCumulativePi();
         }
         recentAvg /= recentCount;
         
@@ -168,7 +171,7 @@ public class PerformanceAnalysisServiceImplHelpers {
      * @param categoryPIs Map of PerformanceIndicator.TopicCategory to cumulative PI
      * @return Average PI value
      */
-    public static double calculateAveragePI(Map<PerformanceIndicator.TopicCategory, Integer> categoryPIs) {
+    public static double calculateAveragePI(Map<TopicCategory, Integer> categoryPIs) {
         if (categoryPIs == null || categoryPIs.isEmpty()) {
             return 0.0;
         }
@@ -191,11 +194,11 @@ public class PerformanceAnalysisServiceImplHelpers {
      * @param lessonCategory LessonTopic.TopicCategory
      * @return PerformanceIndicator.TopicCategory
      */
-    public static PerformanceIndicator.TopicCategory convertToPerformanceCategory(
+    public static TopicCategory convertToPerformanceCategory(
             LessonTopic.TopicCategory lessonCategory) {
         if (lessonCategory == null) {
             return null;
         }
-        return PerformanceIndicator.TopicCategory.valueOf(lessonCategory.name());
+        return TopicCategory.valueOf(lessonCategory.name());
     }
 }
