@@ -7,5 +7,7 @@
         "g:\\Configurations\\guava-33.5.0-jre.jar",
         "g:\\Configurations\\jbcrypt-0.4.jar",
         "g:\\Configurations\\gson-2.10.1.jar"
-    ]
+    ],
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

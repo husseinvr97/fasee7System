@@ -12,9 +12,10 @@ import com.studenttracker.exception.DAOException;
  */
 public class DatabaseConnection {
     private static DatabaseConnection instance;
+    private static DatabaseConnection testInstance = null;
     private static final String DB_URL = "jdbc:sqlite:student_performance.db";
     
-    private DatabaseConnection() {
+    protected DatabaseConnection() {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
@@ -23,10 +24,21 @@ public class DatabaseConnection {
     }
     
     public static synchronized DatabaseConnection getInstance() {
+        if (testInstance != null) {
+            return testInstance;
+        }
         if (instance == null) {
             instance = new DatabaseConnection();
         }
         return instance;
+    }
+
+    public static void setTestInstance(DatabaseConnection testConnection) {
+        testInstance = testConnection;
+    }
+
+    public static void clearTestInstance() {
+        testInstance = null;
     }
     
     public Connection getConnection() {

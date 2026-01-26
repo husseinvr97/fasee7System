@@ -1,6 +1,5 @@
 package com.studenttracker.service.impl;
 
-import com.google.common.eventbus.EventBus;
 import com.studenttracker.dao.StudentDAO;
 
 import com.studenttracker.exception.DuplicatePhoneNumberException;
@@ -40,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
      * @param eventBus Event bus for publishing domain events
      * @param consecutivityService Service for tracking consecutive absences
      */
-    public StudentServiceImpl(StudentDAO studentDAO, EventBus eventBus, 
+    public StudentServiceImpl(StudentDAO studentDAO, 
                              ConsecutivityTrackingService consecutivityService) {
         this.studentDAO = studentDAO;
         this.eventBusService = EventBusService.getInstance();
@@ -226,9 +225,8 @@ public class StudentServiceImpl implements StudentService {
         
         // Step 4: Reset consecutivity tracking
         // TODO: Implement when consecutivity module is ready
-        consecutivityService.resetConsecutivity(studentId);
         try {
-            consecutivityService.resetConsecutivity(studentId);
+            consecutivityService.resetAllTracking(studentId);
         } catch (Exception e) {
             // Log warning but don't fail the restore operation
             System.err.println("Warning: Failed to reset consecutivity for student " + 
