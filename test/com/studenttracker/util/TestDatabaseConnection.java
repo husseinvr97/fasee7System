@@ -46,19 +46,21 @@ public class TestDatabaseConnection extends DatabaseConnection {
                 ")"
             );
             
-            // Create students table
             stmt.execute(
-                "CREATE TABLE IF NOT EXISTS students (" +
-                "student_id INT PRIMARY KEY AUTO_INCREMENT, " +
-                "student_name VARCHAR(255) NOT NULL, " +
-                "phone_number VARCHAR(20) UNIQUE NOT NULL, " +
-                "status VARCHAR(20) NOT NULL CHECK(status IN ('ACTIVE', 'ARCHIVED')), " +
-                "created_at TIMESTAMP NOT NULL, " +
-                "archived_at TIMESTAMP, " +
-                "archived_by INT, " +
-                "FOREIGN KEY (archived_by) REFERENCES users(user_id)" +
-                ")"
-            );
+    "CREATE TABLE IF NOT EXISTS students (" +
+    "student_id INT PRIMARY KEY AUTO_INCREMENT, " +
+    "full_name VARCHAR(255) NOT NULL, " +
+    "phone_number VARCHAR(20) UNIQUE NOT NULL, " +
+    "whatsapp_number VARCHAR(20), " +
+    "parent_phone_number VARCHAR(20), " +
+    "parent_whatsapp_number VARCHAR(20), " +
+    "registration_date TIMESTAMP NOT NULL, " +
+    "status VARCHAR(20) NOT NULL CHECK(status IN ('ACTIVE', 'ARCHIVED')), " +
+    "archived_at TIMESTAMP, " +
+    "archived_by INT, " +
+    "FOREIGN KEY (archived_by) REFERENCES users(user_id)" +
+    ")"
+);
             
             // Create lessons table
             stmt.execute(
@@ -128,6 +130,34 @@ public class TestDatabaseConnection extends DatabaseConnection {
                 "FOREIGN KEY (created_by) REFERENCES users(user_id)" +
                 ")"
             );
+
+            // Create missions table
+stmt.execute(
+    "CREATE TABLE IF NOT EXISTS missions (" +
+    "mission_id INT PRIMARY KEY AUTO_INCREMENT, " +
+    "lesson_id INT NOT NULL, " +
+    "mission_type VARCHAR(50) NOT NULL CHECK(mission_type IN ('ATTENDANCE_HOMEWORK', 'QUIZ_GRADING')), " +
+    "assigned_to INT NOT NULL, " +
+    "assigned_by INT NOT NULL, " +
+    "assigned_at TIMESTAMP NOT NULL, " +
+    "status VARCHAR(20) NOT NULL CHECK(status IN ('IN_PROGRESS', 'COMPLETED')), " +
+    "completed_at TIMESTAMP, " +
+    "FOREIGN KEY (lesson_id) REFERENCES lessons(lesson_id) ON DELETE CASCADE, " +
+    "FOREIGN KEY (assigned_to) REFERENCES users(user_id), " +
+    "FOREIGN KEY (assigned_by) REFERENCES users(user_id)" +
+    ")"
+);
+
+// Create mission_drafts table
+stmt.execute(
+    "CREATE TABLE IF NOT EXISTS mission_drafts (" +
+    "draft_id INT PRIMARY KEY AUTO_INCREMENT, " +
+    "mission_id INT UNIQUE NOT NULL, " +
+    "draft_data TEXT NOT NULL, " +
+    "last_saved TIMESTAMP NOT NULL, " +
+    "FOREIGN KEY (mission_id) REFERENCES missions(mission_id) ON DELETE CASCADE" +
+    ")"
+);
             
             System.out.println("✓ Test database schema created successfully!");
             
@@ -153,6 +183,8 @@ public class TestDatabaseConnection extends DatabaseConnection {
             stmt.execute("TRUNCATE TABLE students");
             stmt.execute("TRUNCATE TABLE users");
             stmt.execute("SET REFERENTIAL_INTEGRITY TRUE");
+            stmt.execute("TRUNCATE TABLE mission_drafts");
+stmt.execute("TRUNCATE TABLE missions");
             
         } catch (SQLException e) {
             throw new DAOException("Failed to clear test database", e);

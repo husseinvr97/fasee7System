@@ -63,9 +63,13 @@ public class HomeworkServiceImpl implements HomeworkService {
         
         // Step 2: Validate student attended this lesson
         Attendance attendance = attendanceDAO.findByLessonAndStudent(lessonId, studentId);
-        if (attendance == null || !attendance.isPresent()) {
-            throw new ValidationException("Student " + studentId + " did not attend lesson " + lessonId);
-        }
+        if (attendance == null) {
+    throw new IllegalStateException("Student has no attendance record for this lesson");
+}
+
+if (!attendance.isPresent()) {
+    throw new IllegalStateException("Cannot mark homework for absent student");
+}
         
         // Step 3: Create homework record
         Homework homework = new Homework(lessonId, studentId, status, markedBy);

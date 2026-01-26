@@ -23,10 +23,10 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final StudentDAO studentDAO;
     private final EventBusService eventBus;
     
-    public AttendanceServiceImpl(AttendanceDAO attendanceDAO, StudentDAO studentDAO) {
+    public AttendanceServiceImpl(AttendanceDAO attendanceDAO, StudentDAO studentDAO, EventBusService eventBus) {
         this.attendanceDAO = attendanceDAO;
         this.studentDAO = studentDAO;
-        this.eventBus = EventBusService.getInstance();
+        this.eventBus = eventBus;
     }
     
     @Override

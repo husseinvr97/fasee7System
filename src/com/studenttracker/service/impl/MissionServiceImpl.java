@@ -162,6 +162,11 @@ public class MissionServiceImpl implements MissionService {
         if (mission == null) {
             throw new ValidationException("Mission not found: " + missionId);
         }
+
+        // Validate mission is not already completed
+if (mission.getStatus() == MissionStatus.COMPLETED) {
+    throw new ValidationException("Mission is already completed");
+}
         
         // Validate completedBy is assigned to this mission
         if (!mission.getAssignedTo().equals(completedBy)) {

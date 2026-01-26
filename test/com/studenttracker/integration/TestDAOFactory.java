@@ -23,6 +23,10 @@ public class TestDAOFactory {
     public static UserDAO createUserDAO() {
         return new UserDAOImpl();
     }
+
+    public static StudentDAO createStudentDAO() {
+    return new StudentDAOImpl();
+}
     
     public static AttendanceDAO createAttendanceDAO() {
         return new AttendanceDAOImpl();
@@ -35,4 +39,12 @@ public class TestDAOFactory {
     public static QuizDAO createQuizDAO() {
         return new QuizDAOImpl();
     }
+
+    public static MissionDAO createMissionDAO() {
+    return new MissionDAOImpl();
+}
+
+public static MissionDraftDAO createMissionDraftDAO() {
+    return new MissionDraftDAOImpl();
+}
 }
