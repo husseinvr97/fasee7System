@@ -72,12 +72,10 @@ public class SceneManager {
             
         } catch (IOException e) {
             e.printStackTrace();
-            AlertHelper.showError("Scene Loading Failed", 
-                "Failed to load screen: " + fxmlPath + "\n" + e.getMessage());
+            AlertHelper.showError("Failed to load screen: " + fxmlPath);
         } catch (NullPointerException e) {
             e.printStackTrace();
-            AlertHelper.showError("FXML Not Found", 
-                "FXML file not found: " + fxmlPath);
+            AlertHelper.showError("FXML file not found: " + fxmlPath);
         }
     }
     
@@ -120,12 +118,10 @@ public class SceneManager {
             
         } catch (IOException e) {
             e.printStackTrace();
-            AlertHelper.showError("Dialog Loading Failed", 
-                "Failed to load dialog: " + fxmlPath + "\n" + e.getMessage());
+            AlertHelper.showError("Failed to load dialog: " + fxmlPath);
         } catch (NullPointerException e) {
             e.printStackTrace();
-            AlertHelper.showError("FXML Not Found", 
-                "Dialog FXML file not found: " + fxmlPath);
+            AlertHelper.showError("Dialog FXML file not found: " + fxmlPath);
         }
     }
     
@@ -155,13 +151,11 @@ public class SceneManager {
             
         } catch (IOException e) {
             e.printStackTrace();
-            AlertHelper.showError("Dialog Loading Failed", 
-                "Failed to load dialog: " + fxmlPath + "\n" + e.getMessage());
+            AlertHelper.showError("Failed to load dialog: " + fxmlPath);
             return null;
         } catch (NullPointerException e) {
             e.printStackTrace();
-            AlertHelper.showError("FXML Not Found", 
-                "Dialog FXML file not found: " + fxmlPath);
+            AlertHelper.showError("Dialog FXML file not found: " + fxmlPath);
             return null;
         }
     }
