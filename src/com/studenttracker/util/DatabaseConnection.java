@@ -323,8 +323,25 @@ stmt.execute(
     ")"
 );
 
+
+
 // Create index for monthly_reports
 stmt.execute("CREATE INDEX IF NOT EXISTS idx_monthly_reports_month ON monthly_reports(report_month)");
+
+
+stmt.execute("CREATE TABLE IF NOT EXISTS recent_activities (" + 
+    "activity_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    "activity_type VARCHAR(50) NOT NULL, " +
+    "activity_description TEXT NOT NULL, " +
+    "entity_type VARCHAR(50), " +
+    "entity_id INTEGER, " +
+    "performed_by INTEGER, "+
+    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+    "FOREIGN KEY (performed_by) REFERENCES users(user_id) "
+);
+
+stmt.execute("CREATE INDEX IF NOT EXISTS idx_recent_activities_created ON recent_activities(created_at DESC);");
+stmt.execute("CREATE INDEX idx_recent_activities_type ON recent_activities(activity_type);");
             
             System.out.println("Database initialized successfully!");
             
