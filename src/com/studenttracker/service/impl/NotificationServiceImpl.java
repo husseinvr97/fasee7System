@@ -41,12 +41,12 @@ public class NotificationServiceImpl implements NotificationService {
      * @param updateRequestDAO DAO for update request data access
      */
     public NotificationServiceImpl(NotificationDAO notificationDAO, UserDAO userDAO,
-                                  StudentDAO studentDAO, UpdateRequestDAO updateRequestDAO) {
+                                  StudentDAO studentDAO, UpdateRequestDAO updateRequestDAO , EventBusService eventBusService) {
         this.notificationDAO = notificationDAO;
         this.userDAO = userDAO;
         this.studentDAO = studentDAO;
         this.updateRequestDAO = updateRequestDAO;
-        this.eventBusService = EventBusService.getInstance();
+        this.eventBusService = eventBusService;
         
         // Register as event subscriber
         this.eventBusService.register(this);

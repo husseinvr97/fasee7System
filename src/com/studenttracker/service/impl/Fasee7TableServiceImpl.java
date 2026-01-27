@@ -328,7 +328,8 @@ public class Fasee7TableServiceImpl implements Fasee7TableService {
         // Step 4: Apply tie-breaking
         List<Fasee7Points> ranked = Fasee7TableServiceImplHelpers.applyTieBreaking(filteredPoints, studentDAO);
 
-        List<Student> top10 = ranked.subList(0, 10).stream()
+        // AFTER (correct):
+List<Student> top10 = ranked.subList(0, Math.min(10, ranked.size())).stream()
             .map(Fasee7Points::getStudentId)
             .map(studentDAO::findById)
             .collect(Collectors.toList());
