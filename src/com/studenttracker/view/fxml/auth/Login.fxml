@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.studenttracker.controller.auth.LoginController"
+            prefHeight="600.0" prefWidth="800.0"
+            styleClass="login-root">
+
+    <VBox alignment="CENTER" spacing="20.0" AnchorPane.topAnchor="0.0" 
+          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" 
+          AnchorPane.rightAnchor="0.0">
+        
+        <!-- Logo/Title -->
+        <VBox alignment="CENTER" spacing="10.0">
+            <Text text="Fasee7 System" styleClass="login-title">
+                <font>
+                    <Font name="System Bold" size="32.0"/>
+                </font>
+            </Text>
+            <Text text="Student Performance Tracker" styleClass="login-subtitle">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Text>
+        </VBox>
+        
+        <!-- Login Form -->
+        <VBox alignment="CENTER" spacing="15.0" maxWidth="350.0" 
+              styleClass="login-form">
+            <padding>
+                <Insets top="30.0" right="40.0" bottom="30.0" left="40.0"/>
+            </padding>
+            
+            <!-- Username -->
+            <VBox spacing="5.0">
+                <Label text="Username:" styleClass="field-label"/>
+                <TextField fx:id="usernameField" 
+                          promptText="Enter username"
+                          styleClass="login-field"/>
+            </VBox>
+            
+            <!-- Password -->
+            <VBox spacing="5.0">
+                <Label text="Password:" styleClass="field-label"/>
+                <PasswordField fx:id="passwordField" 
+                              promptText="Enter password"
+                              styleClass="login-field"
+                              onAction="#handleLogin"/>
+            </VBox>
+            
+            <!-- Remember Me -->
+            <CheckBox fx:id="rememberMeCheckbox" 
+                     text="Remember Me" 
+                     styleClass="remember-checkbox"/>
+            
+            <!-- Error Label (hidden by default) -->
+            <Label fx:id="errorLabel" 
+                  styleClass="error-label" 
+                  visible="false" 
+                  managed="false"
+                  wrapText="true"/>
+            
+            <!-- Login Button -->
+            <Button fx:id="loginButton" 
+                   text="Login" 
+                   onAction="#handleLogin"
+                   prefWidth="200.0"
+                   styleClass="login-button">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Button>
+        </VBox>
+    </VBox>
+</AnchorPane>
