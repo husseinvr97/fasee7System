@@ -25,6 +25,7 @@
         <gson.version>2.10.1</gson.version>
         <sqlite.version>3.45.0.0</sqlite.version>
         <jbcrypt.version>0.4</jbcrypt.version>
+        <javafx.version>21.0.1</javafx.version>
     </properties>
 
     <dependencies>
@@ -54,6 +55,18 @@
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>${jbcrypt.version}</version>
+        </dependency>
+
+        <!-- JavaFX -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>21.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>21.0.1</version>
         </dependency>
 
         <!-- JUnit 5 -->
@@ -120,6 +133,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.3</version>
+            </plugin>
+
+            <!-- JavaFX Maven Plugin -->
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>com.studenttracker.Main</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
