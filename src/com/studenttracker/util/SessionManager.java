@@ -68,7 +68,7 @@ public class SessionManager {
      * 
      * @return the singleton SessionManager instance
      */
-    public static SessionManager getInstance() {
+    public synchronized static SessionManager getInstance() {
         if (instance == null) {
             instance = new SessionManager();
         }

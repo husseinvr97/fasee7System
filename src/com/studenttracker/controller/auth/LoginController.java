@@ -333,7 +333,8 @@ public class LoginController extends BaseController {
      * 
      * @param message the error message to display
      */
-    private void showError(String message) {
+    @Override
+    protected void showError(String message) {
         errorLabel.setText(message);
         errorLabel.setVisible(true);
         errorLabel.setManaged(true);

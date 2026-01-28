@@ -393,6 +393,32 @@ CREATE TABLE IF NOT EXISTS monthly_reports (
 
 CREATE INDEX idx_monthly_reports_month ON monthly_reports(report_month);
 
+CREATE TABLE IF NOT EXISTS recent_activities (
+    activity_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    activity_type VARCHAR(50) NOT NULL, 
+    -- Types: 'LESSON_CREATED', 'QUIZ_GRADED', 'STUDENT_REGISTERED', 
+    --        'STUDENT_ARCHIVED', 'WARNING_GENERATED', 'MISSION_COMPLETED', etc.
+    
+    activity_description TEXT NOT NULL,
+    -- Human-readable description, e.g., "Lesson 48 created by Admin Ahmed"
+    
+    entity_type VARCHAR(50), 
+    -- Optional: 'STUDENT', 'LESSON', 'MISSION', 'WARNING', etc.
+    
+    entity_id INTEGER,
+    -- Optional: ID of related entity (student_id, lesson_id, etc.)
+    
+    performed_by INTEGER,
+    -- User who performed the action (can be NULL for system actions)
+    
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (performed_by) REFERENCES users(user_id)
+);
+
+CREATE INDEX idx_recent_activities_created ON recent_activities(created_at DESC);
+CREATE INDEX idx_recent_activities_type ON recent_activities(activity_type);
+
 -- ============================================
 -- INSERT DEFAULT ADMIN USER
 -- ============================================

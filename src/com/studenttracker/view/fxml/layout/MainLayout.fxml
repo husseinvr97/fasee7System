@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.studenttracker.controller.layout.MainLayoutController"
+            prefHeight="800.0" prefWidth="1200.0"
+            styleClass="main-layout"
+            stylesheets="@../../css/main-layout.css">
+
+    <!-- TOP: Header -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20.0">
+            <padding>
+                <Insets top="15.0" right="25.0" bottom="15.0" left="25.0"/>
+            </padding>
+            
+            <Label text="Fasee7 System" styleClass="header-title">
+                <font>
+                    <Font name="System Bold" size="22.0"/>
+                </font>
+            </Label>
+            
+            <!-- Spacer to push user info to right -->
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <!-- User Info -->
+            <Label fx:id="userInfoLabel" text="User: Loading..." styleClass="user-info">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Label>
+            
+            <!-- Logout Button -->
+            <Button fx:id="logoutButton" 
+                   text="Logout" 
+                   onAction="#handleLogout"
+                   styleClass="logout-button">
+                <font>
+                    <Font size="13.0"/>
+                </font>
+            </Button>
+        </HBox>
+    </top>
+
+    <!-- LEFT: Sidebar Navigation -->
+    <left>
+        <VBox fx:id="sidebar" styleClass="sidebar" spacing="5.0" prefWidth="220.0">
+            <padding>
+                <Insets top="15.0" right="10.0" bottom="15.0" left="10.0"/>
+            </padding>
+            
+            <!-- Navigation Buttons -->
+            <Button fx:id="dashboardBtn" 
+                   text="🏠 Home" 
+                   onAction="#showDashboard"
+                   maxWidth="Infinity"
+                   styleClass="nav-button">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Button>
+            
+            <Button fx:id="studentsBtn" 
+                   text="👥 Students" 
+                   onAction="#showStudents"
+                   maxWidth="Infinity"
+                   styleClass="nav-button">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Button>
+            
+            <Button fx:id="lessonsBtn" 
+                   text="📚 Lessons" 
+                   onAction="#showLessons"
+                   maxWidth="Infinity"
+                   styleClass="nav-button">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Button>
+            
+            <Button fx:id="missionsBtn" 
+                   text="🎯 Missions" 
+                   onAction="#showMissions"
+                   maxWidth="Infinity"
+                   styleClass="nav-button">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Button>
+            
+            <Button fx:id="fasee7Btn" 
+                   text="🏆 Fasee7 Table" 
+                   onAction="#showFasee7"
+                   maxWidth="Infinity"
+                   styleClass="nav-button">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Button>
+            
+            <Button fx:id="warningsBtn" 
+                   text="⚠️ Warnings" 
+                   onAction="#showWarnings"
+                   maxWidth="Infinity"
+                   styleClass="nav-button">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Button>
+            
+            <Button fx:id="notificationsBtn" 
+                   text="🔔 Notifications" 
+                   onAction="#showNotifications"
+                   maxWidth="Infinity"
+                   styleClass="nav-button">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Button>
+            
+            <Button fx:id="reportsBtn" 
+                   text="📈 Reports" 
+                   onAction="#showReports"
+                   maxWidth="Infinity"
+                   styleClass="nav-button">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Button>
+            
+            <!-- Admin Only: Update Requests -->
+            <Button fx:id="updateRequestsBtn" 
+                   text="📋 Requests" 
+                   onAction="#showUpdateRequests"
+                   maxWidth="Infinity"
+                   styleClass="nav-button"
+                   managed="true"
+                   visible="true">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Button>
+            
+            <!-- Spacer -->
+            <Region VBox.vgrow="ALWAYS"/>
+            
+            <!-- Settings (future) -->
+            <Button fx:id="settingsBtn" 
+                   text="⚙️ Settings" 
+                   onAction="#showSettings"
+                   maxWidth="Infinity"
+                   styleClass="nav-button">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Button>
+        </VBox>
+    </left>
+
+    <!-- CENTER: Content Area (dynamically loaded) -->
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area">
+            <!-- Content views loaded here dynamically -->
+            <Label text="Welcome to Fasee7 System" styleClass="placeholder-text">
+                <font>
+                    <Font size="24.0"/>
+                </font>
+            </Label>
+        </StackPane>
+    </center>
+</BorderPane>

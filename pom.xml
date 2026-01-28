@@ -114,6 +114,21 @@
     <build>
         <sourceDirectory>src</sourceDirectory>
 <testSourceDirectory>test</testSourceDirectory>
+
+
+        <!-- ADD THIS: Resources Configuration -->
+    <resources>
+        <resource>
+            <directory>src</directory>
+            <includes>
+                <include>**/*.fxml</include>
+                <include>**/*.css</include>
+                <include>**/*.properties</include>
+                <include>**/*.png</include>
+                <include>**/*.jpg</include>
+            </includes>
+        </resource>
+    </resources>
         
         <plugins>
             <!-- Maven Compiler Plugin -->
