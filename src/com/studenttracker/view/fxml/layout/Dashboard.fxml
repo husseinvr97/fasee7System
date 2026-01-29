@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<!--
+  Dashboard FXML
+  
+  Purpose: Dashboard overview showing key metrics and recent activities
+  Controller: DashboardController
+  
+  Components:
+  - Title bar with refresh button
+  - Metrics grid (6 cards)
+  - Recent activities list
+  
+  Features:
+  - Real-time metric updates
+  - Event-driven activity feed
+  - Manual refresh capability
+-->
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.studenttracker.controller.layout.DashboardController"
+      spacing="25.0"
+      styleClass="dashboard-root"
+      stylesheets="@../../css/styles.css">
+    
+    <padding>
+        <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
+    </padding>
+    
+    <!-- ==================== HEADER ==================== -->
+    <HBox alignment="CENTER_LEFT" spacing="15.0">
+        <!-- Title -->
+        <Label text="Dashboard" styleClass="dashboard-title">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Label>
+        
+        <!-- Spacer -->
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <!-- Refresh Button -->
+        <Button fx:id="refreshButton" 
+               text="🔄 Refresh" 
+               onAction="#handleRefresh"
+               styleClass="refresh-button">
+            <font>
+                <Font size="13.0"/>
+            </font>
+        </Button>
+    </HBox>
+    
+    <!-- ==================== METRICS GRID ==================== -->
+    <GridPane hgap="20.0" vgap="20.0">
+        <!-- Row 1 -->
+        
+        <!-- Active Students -->
+        <VBox styleClass="metric-card" spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <padding>
+                <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+            </padding>
+            
+            <Label text="ACTIVE STUDENTS" styleClass="metric-label">
+                <font>
+                    <Font size="12.0"/>
+                </font>
+            </Label>
+            <Label fx:id="activeStudentsLabel" text="0" styleClass="metric-value">
+                <font>
+                    <Font name="System Bold" size="32.0"/>
+                </font>
+            </Label>
+        </VBox>
+        
+        <!-- Archived Students -->
+        <VBox styleClass="metric-card" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <padding>
+                <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+            </padding>
+            
+            <Label text="ARCHIVED STUDENTS" styleClass="metric-label">
+                <font>
+                    <Font size="12.0"/>
+                </font>
+            </Label>
+            <Label fx:id="archivedStudentsLabel" text="0" styleClass="metric-value">
+                <font>
+                    <Font name="System Bold" size="32.0"/>
+                </font>
+            </Label>
+        </VBox>
+        
+        <!-- Total Lessons -->
+        <VBox styleClass="metric-card" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="0">
+            <padding>
+                <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+            </padding>
+            
+            <Label text="TOTAL LESSONS" styleClass="metric-label">
+                <font>
+                    <Font size="12.0"/>
+                </font>
+            </Label>
+            <Label fx:id="totalLessonsLabel" text="0" styleClass="metric-value">
+                <font>
+                    <Font name="System Bold" size="32.0"/>
+                </font>
+            </Label>
+        </VBox>
+        
+        <!-- Row 2 -->
+        
+        <!-- Pending Missions -->
+        <VBox styleClass="metric-card" spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <padding>
+                <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+            </padding>
+            
+            <Label text="PENDING MISSIONS" styleClass="metric-label">
+                <font>
+                    <Font size="12.0"/>
+                </font>
+            </Label>
+            <Label fx:id="pendingMissionsLabel" text="0" styleClass="metric-value">
+                <font>
+                    <Font name="System Bold" size="32.0"/>
+                </font>
+            </Label>
+        </VBox>
+        
+        <!-- Active Warnings -->
+        <VBox styleClass="metric-card" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <padding>
+                <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+            </padding>
+            
+            <Label text="ACTIVE WARNINGS" styleClass="metric-label">
+                <font>
+                    <Font size="12.0"/>
+                </font>
+            </Label>
+            <Label fx:id="activeWarningsLabel" text="0" styleClass="metric-value">
+                <font>
+                    <Font name="System Bold" size="32.0"/>
+                </font>
+            </Label>
+        </VBox>
+        
+        <!-- Pending Requests (Admin Only) -->
+        <VBox fx:id="pendingRequestsCard" 
+             styleClass="metric-card" 
+             spacing="10.0" 
+             GridPane.columnIndex="2" 
+             GridPane.rowIndex="1"
+             managed="true"
+             visible="true">
+            <padding>
+                <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+            </padding>
+            
+            <Label text="PENDING REQUESTS" styleClass="metric-label">
+                <font>
+                    <Font size="12.0"/>
+                </font>
+            </Label>
+            <Label fx:id="pendingRequestsLabel" text="0" styleClass="metric-value">
+                <font>
+                    <Font name="System Bold" size="32.0"/>
+                </font>
+            </Label>
+        </VBox>
+    </GridPane>
+    
+    <!-- ==================== RECENT ACTIVITIES SECTION ==================== -->
+    <VBox spacing="15.0" VBox.vgrow="ALWAYS">
+        <!-- Section Title -->
+        <Label text="Recent Activity" styleClass="section-title">
+            <font>
+                <Font name="System Bold" size="16.0"/>
+            </font>
+        </Label>
+        
+        <!-- Activities List -->
+        <ListView fx:id="activitiesListView" 
+                 styleClass="activities-list"
+                 VBox.vgrow="ALWAYS"
+                 prefHeight="300.0">
+            <!-- List will be populated by controller -->
+        </ListView>
+    </VBox>
+</VBox>

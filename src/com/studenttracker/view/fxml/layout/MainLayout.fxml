@@ -5,30 +5,48 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
+<!--
+  Main Layout FXML
+  
+  Purpose: Main application shell with navigation
+  Controller: MainLayoutController
+  
+  Structure:
+  - Top: Header (Logo, User Info, Logout)
+  - Left: Sidebar Navigation
+  - Center: Dynamic Content Area
+  
+  Features:
+  - Role-based menu visibility
+  - Active button highlighting
+  - Dynamic content loading
+-->
+
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.studenttracker.controller.layout.MainLayoutController"
             prefHeight="800.0" prefWidth="1200.0"
             styleClass="main-layout"
-            stylesheets="@../../css/main-layout.css">
+            stylesheets="@../../css/styles.css">
 
-    <!-- TOP: Header -->
+    <!-- ==================== TOP: HEADER ==================== -->
     <top>
         <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20.0">
             <padding>
                 <Insets top="15.0" right="25.0" bottom="15.0" left="25.0"/>
             </padding>
             
+            <!-- Logo/Title -->
             <Label text="Fasee7 System" styleClass="header-title">
                 <font>
-                    <Font name="System Bold" size="22.0"/>
+                    <Font name="System Bold" size="20.0"/>
                 </font>
             </Label>
             
             <!-- Spacer to push user info to right -->
             <Region HBox.hgrow="ALWAYS"/>
             
-            <!-- User Info -->
+            <!-- User Info Label -->
             <Label fx:id="userInfoLabel" text="User: Loading..." styleClass="user-info">
                 <font>
                     <Font size="14.0"/>
@@ -47,16 +65,16 @@
         </HBox>
     </top>
 
-    <!-- LEFT: Sidebar Navigation -->
+    <!-- ==================== LEFT: SIDEBAR NAVIGATION ==================== -->
     <left>
         <VBox fx:id="sidebar" styleClass="sidebar" spacing="5.0" prefWidth="220.0">
             <padding>
                 <Insets top="15.0" right="10.0" bottom="15.0" left="10.0"/>
             </padding>
             
-            <!-- Navigation Buttons -->
+            <!-- Dashboard -->
             <Button fx:id="dashboardBtn" 
-                   text="🏠 Home" 
+                   text="🏠  Dashboard" 
                    onAction="#showDashboard"
                    maxWidth="Infinity"
                    styleClass="nav-button">
@@ -65,8 +83,9 @@
                 </font>
             </Button>
             
+            <!-- Students -->
             <Button fx:id="studentsBtn" 
-                   text="👥 Students" 
+                   text="👥  Students" 
                    onAction="#showStudents"
                    maxWidth="Infinity"
                    styleClass="nav-button">
@@ -75,8 +94,9 @@
                 </font>
             </Button>
             
+            <!-- Lessons -->
             <Button fx:id="lessonsBtn" 
-                   text="📚 Lessons" 
+                   text="📚  Lessons" 
                    onAction="#showLessons"
                    maxWidth="Infinity"
                    styleClass="nav-button">
@@ -85,8 +105,9 @@
                 </font>
             </Button>
             
+            <!-- Missions -->
             <Button fx:id="missionsBtn" 
-                   text="🎯 Missions" 
+                   text="🎯  Missions" 
                    onAction="#showMissions"
                    maxWidth="Infinity"
                    styleClass="nav-button">
@@ -95,8 +116,9 @@
                 </font>
             </Button>
             
+            <!-- Fasee7 Table -->
             <Button fx:id="fasee7Btn" 
-                   text="🏆 Fasee7 Table" 
+                   text="🏆  Fasee7 Table" 
                    onAction="#showFasee7"
                    maxWidth="Infinity"
                    styleClass="nav-button">
@@ -105,8 +127,9 @@
                 </font>
             </Button>
             
+            <!-- Warnings -->
             <Button fx:id="warningsBtn" 
-                   text="⚠️ Warnings" 
+                   text="⚠️  Warnings" 
                    onAction="#showWarnings"
                    maxWidth="Infinity"
                    styleClass="nav-button">
@@ -115,8 +138,9 @@
                 </font>
             </Button>
             
+            <!-- Notifications -->
             <Button fx:id="notificationsBtn" 
-                   text="🔔 Notifications" 
+                   text="🔔  Notifications" 
                    onAction="#showNotifications"
                    maxWidth="Infinity"
                    styleClass="nav-button">
@@ -125,8 +149,9 @@
                 </font>
             </Button>
             
+            <!-- Reports -->
             <Button fx:id="reportsBtn" 
-                   text="📈 Reports" 
+                   text="📈  Reports" 
                    onAction="#showReports"
                    maxWidth="Infinity"
                    styleClass="nav-button">
@@ -135,9 +160,9 @@
                 </font>
             </Button>
             
-            <!-- Admin Only: Update Requests -->
+            <!-- Update Requests (Admin Only) -->
             <Button fx:id="updateRequestsBtn" 
-                   text="📋 Requests" 
+                   text="📋  Requests" 
                    onAction="#showUpdateRequests"
                    maxWidth="Infinity"
                    styleClass="nav-button"
@@ -148,12 +173,12 @@
                 </font>
             </Button>
             
-            <!-- Spacer -->
+            <!-- Spacer to push settings to bottom -->
             <Region VBox.vgrow="ALWAYS"/>
             
-            <!-- Settings (future) -->
+            <!-- Settings -->
             <Button fx:id="settingsBtn" 
-                   text="⚙️ Settings" 
+                   text="⚙️  Settings" 
                    onAction="#showSettings"
                    maxWidth="Infinity"
                    styleClass="nav-button">
@@ -164,15 +189,24 @@
         </VBox>
     </left>
 
-    <!-- CENTER: Content Area (dynamically loaded) -->
+    <!-- ==================== CENTER: CONTENT AREA ==================== -->
     <center>
         <StackPane fx:id="contentArea" styleClass="content-area">
-            <!-- Content views loaded here dynamically -->
-            <Label text="Welcome to Fasee7 System" styleClass="placeholder-text">
-                <font>
-                    <Font size="24.0"/>
-                </font>
-            </Label>
+            <!-- Content views will be loaded here dynamically -->
+            
+            <!-- Default placeholder -->
+            <VBox alignment="CENTER" spacing="20.0">
+                <Label text="Welcome to Fasee7 System" styleClass="dashboard-title">
+                    <font>
+                        <Font name="System Bold" size="24.0"/>
+                    </font>
+                </Label>
+                <Label text="Select an option from the sidebar to begin" styleClass="section-title">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+            </VBox>
         </StackPane>
     </center>
 </BorderPane>
