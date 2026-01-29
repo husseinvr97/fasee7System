@@ -6,76 +6,149 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<!--
+  Login Screen FXML
+  
+  Purpose: User authentication for Fasee7 Student Tracker System
+  Controller: LoginController
+  
+  Components:
+  - Username TextField
+  - Password PasswordField
+  - Remember Me CheckBox
+  - Login Button
+  - Error Label (hidden by default)
+  
+  Features:
+  - Clean, centered design
+  - Enter key triggers login
+  - Professional styling
+-->
+
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.studenttracker.controller.auth.LoginController"
-            prefHeight="600.0" prefWidth="800.0"
-            styleClass="login-root">
+            prefHeight="600.0" prefWidth="900.0"
+            styleClass="login-root"
+            stylesheets="@../../css/styles.css">
 
-    <VBox alignment="CENTER" spacing="20.0" AnchorPane.topAnchor="0.0" 
-          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" 
+    <!-- Center Container -->
+    <VBox alignment="CENTER" spacing="20.0" 
+          AnchorPane.topAnchor="0.0" 
+          AnchorPane.bottomAnchor="0.0" 
+          AnchorPane.leftAnchor="0.0" 
           AnchorPane.rightAnchor="0.0">
         
-        <!-- Logo/Title -->
+        <!-- Logo/Title Section -->
         <VBox alignment="CENTER" spacing="10.0">
             <Text text="Fasee7 System" styleClass="login-title">
                 <font>
-                    <Font name="System Bold" size="32.0"/>
+                    <Font name="System Bold" size="36.0"/>
                 </font>
             </Text>
             <Text text="Student Performance Tracker" styleClass="login-subtitle">
                 <font>
-                    <Font size="14.0"/>
+                    <Font size="16.0"/>
                 </font>
             </Text>
         </VBox>
         
-        <!-- Login Form -->
-        <VBox alignment="CENTER" spacing="15.0" maxWidth="350.0" 
-              styleClass="login-form">
+        <!-- Spacer -->
+        <Region prefHeight="20.0"/>
+        
+        <!-- Login Form Card -->
+        <VBox alignment="CENTER" spacing="20.0" maxWidth="400.0" 
+              styleClass="login-form-card">
             <padding>
-                <Insets top="30.0" right="40.0" bottom="30.0" left="40.0"/>
+                <Insets top="40.0" right="50.0" bottom="40.0" left="50.0"/>
             </padding>
             
-            <!-- Username -->
-            <VBox spacing="5.0">
-                <Label text="Username:" styleClass="field-label"/>
+            <!-- Form Title -->
+            <Label text="Login to Your Account" styleClass="form-title">
+                <font>
+                    <Font name="System Bold" size="18.0"/>
+                </font>
+            </Label>
+            
+            <!-- Username Field -->
+            <VBox spacing="8.0">
+                <Label text="Username" styleClass="field-label">
+                    <font>
+                        <Font size="13.0"/>
+                    </font>
+                </Label>
                 <TextField fx:id="usernameField" 
-                          promptText="Enter username"
-                          styleClass="login-field"/>
+                          promptText="Enter your username"
+                          styleClass="login-field"
+                          prefHeight="40.0"/>
             </VBox>
             
-            <!-- Password -->
-            <VBox spacing="5.0">
-                <Label text="Password:" styleClass="field-label"/>
+            <!-- Password Field -->
+            <VBox spacing="8.0">
+                <Label text="Password" styleClass="field-label">
+                    <font>
+                        <Font size="13.0"/>
+                    </font>
+                </Label>
                 <PasswordField fx:id="passwordField" 
-                              promptText="Enter password"
+                              promptText="Enter your password"
                               styleClass="login-field"
+                              prefHeight="40.0"
                               onAction="#handleLogin"/>
             </VBox>
             
-            <!-- Remember Me -->
-            <CheckBox fx:id="rememberMeCheckbox" 
-                     text="Remember Me" 
-                     styleClass="remember-checkbox"/>
+            <!-- Remember Me Checkbox -->
+            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                <CheckBox fx:id="rememberMeCheckbox" 
+                         text="Remember my username" 
+                         styleClass="remember-checkbox"/>
+            </HBox>
             
-            <!-- Error Label (hidden by default) -->
+            <!-- Error Label (Hidden by default) -->
             <Label fx:id="errorLabel" 
                   styleClass="error-label" 
                   visible="false" 
                   managed="false"
-                  wrapText="true"/>
+                  wrapText="true"
+                  maxWidth="300.0"
+                  alignment="CENTER">
+                <font>
+                    <Font size="12.0"/>
+                </font>
+            </Label>
             
             <!-- Login Button -->
             <Button fx:id="loginButton" 
                    text="Login" 
                    onAction="#handleLogin"
-                   prefWidth="200.0"
-                   styleClass="login-button">
+                   prefWidth="250.0"
+                   prefHeight="45.0"
+                   styleClass="login-button"
+                   defaultButton="true">
                 <font>
-                    <Font size="14.0"/>
+                    <Font name="System Bold" size="15.0"/>
                 </font>
             </Button>
+            
+            <!-- Helper Text -->
+            <Label text="Test Credentials: admin / admin123" 
+                   styleClass="helper-text"
+                   wrapText="true"
+                   alignment="CENTER">
+                <font>
+                    <Font size="11.0"/>
+                </font>
+            </Label>
         </VBox>
+        
+        <!-- Bottom Spacer -->
+        <Region VBox.vgrow="ALWAYS"/>
+        
+        <!-- Footer -->
+        <Label text="© 2026 Fasee7 Student Tracker System" styleClass="footer-text">
+            <font>
+                <Font size="11.0"/>
+            </font>
+        </Label>
     </VBox>
 </AnchorPane>

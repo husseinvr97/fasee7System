@@ -8,6 +8,7 @@ import com.studenttracker.util.DatabaseConnection;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -247,7 +248,14 @@ public class UserDAOImpl implements UserDAO {
         user.setRole(UserRole.valueOf(rs.getString("role")));
         
         String createdAt = rs.getString("created_at");
-        user.setCreatedAt(createdAt != null ? LocalDateTime.parse(createdAt) : null);
+if(createdAt == null) {
+    user.setCreatedAt(null);
+} else {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    createdAt = createdAt.trim();
+    LocalDateTime parsedDateTime = LocalDateTime.parse(createdAt, formatter);  // SAVE IT
+    user.setCreatedAt(parsedDateTime);  // USE IT
+}
         
         user.setActive(rs.getBoolean("is_active"));
         

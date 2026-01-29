@@ -39,10 +39,10 @@ public class StudentServiceImpl implements StudentService {
      * @param eventBus Event bus for publishing domain events
      * @param consecutivityService Service for tracking consecutive absences
      */
-    public StudentServiceImpl(StudentDAO studentDAO, 
+    public StudentServiceImpl(StudentDAO studentDAO, EventBusService eventBusService, 
                              ConsecutivityTrackingService consecutivityService) {
         this.studentDAO = studentDAO;
-        this.eventBusService = EventBusService.getInstance();
+        this.eventBusService = eventBusService;
         this.consecutivityService = consecutivityService;
     }
     

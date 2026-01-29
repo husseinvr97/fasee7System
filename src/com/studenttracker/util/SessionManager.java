@@ -114,7 +114,7 @@ public class SessionManager {
      * <p>After calling this method, isLoggedIn() will return false
      * and getCurrentUser() will return null.</p>
      */
-    public void clearSession() {
+    public synchronized void clearSession() {
         this.currentUser = null;
     }
     
@@ -167,7 +167,7 @@ public class SessionManager {
      * <p>Clears the session and destroys the singleton instance,
      * allowing a fresh instance to be created on next getInstance() call.</p>
      */
-    protected static void resetInstance() {
+    protected synchronized static void resetInstance() {
         if (instance != null) {
             instance.clearSession();
             instance = null;

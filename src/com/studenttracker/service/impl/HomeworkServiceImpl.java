@@ -38,11 +38,11 @@ public class HomeworkServiceImpl implements HomeworkService {
      * @param attendanceDAO DAO for attendance data access
      */
     public HomeworkServiceImpl(HomeworkDAO homeworkDAO, StudentDAO studentDAO, 
-                              AttendanceDAO attendanceDAO) {
+                              AttendanceDAO attendanceDAO , EventBusService eventBusService) {
         this.homeworkDAO = homeworkDAO;
         this.studentDAO = studentDAO;
         this.attendanceDAO = attendanceDAO;
-        this.eventBusService = EventBusService.getInstance();
+        this.eventBusService = eventBusService;
     }
     
     

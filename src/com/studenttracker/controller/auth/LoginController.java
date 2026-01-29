@@ -1,55 +1,61 @@
 package com.studenttracker.controller.auth;
 
 import com.studenttracker.controller.BaseController;
+import com.studenttracker.exception.InvalidCredentialsException;
 import com.studenttracker.model.User;
 import com.studenttracker.service.UserService;
-import com.studenttracker.util.ServiceLocator;
-import com.studenttracker.util.SessionManager;
-import com.studenttracker.util.SceneManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import java.io.*;
-import java.nio.file.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * LoginController - Handles user authentication and login functionality.
+ * Controller for the Login screen.
  * 
- * <p>This controller manages the login screen, including:</p>
+ * <p><b>Responsibilities:</b></p>
  * <ul>
- *   <li>User credential validation and authentication</li>
- *   <li>"Remember Me" functionality (username only, never password)</li>
- *   <li>Failed login attempt tracking with lockout mechanism</li>
- *   <li>Session management and navigation to main application</li>
+ *   <li>Authenticate users via UserService</li>
+ *   <li>Handle "Remember Me" functionality (saves username only)</li>
+ *   <li>Implement failed attempt tracking (3 strikes = lockout)</li>
+ *   <li>Navigate to MainLayout on successful login</li>
+ *   <li>Store authenticated user in SessionManager</li>
  * </ul>
  * 
  * <p><b>Security Features:</b></p>
  * <ul>
- *   <li>3 failed attempts trigger a 3-second lockout</li>
- *   <li>Password is never stored locally</li>
- *   <li>Only username is saved for "Remember Me"</li>
- *   <li>Input validation before authentication</li>
+ *   <li>Password never stored locally</li>
+ *   <li>3 failed attempts = 3 second lockout</li>
+ *   <li>Generic error message (doesn't reveal if username exists)</li>
+ *   <li>Remember Me only saves username, not password</li>
+ * </ul>
+ * 
+ * <p><b>User Experience:</b></p>
+ * <ul>
+ *   <li>Enter key in password field triggers login</li>
+ *   <li>Auto-focus on appropriate field</li>
+ *   <li>Clear error messages</li>
+ *   <li>Disabled button during authentication</li>
  * </ul>
  * 
  * @author fasee7System
  * @version 1.0.0
- * @since 2026-01-27
+ * @since 2026-01-28
  */
 public class LoginController extends BaseController {
     
-    // ==================== Constants ====================
-    
-    /**
-     * Logger for login-related events and errors.
-     */
     private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
+    
+    // ==================== CONSTANTS ====================
     
     /**
      * File path for storing remembered username.
-     * Located in user's home directory: ~/.fasee7/remembered_username.txt
+     * Located in user's home directory for persistence.
      */
     private static final String REMEMBER_ME_FILE = System.getProperty("user.home") + 
                                                    "/.fasee7/remembered_username.txt";
@@ -64,78 +70,49 @@ public class LoginController extends BaseController {
      */
     private static final int LOCKOUT_SECONDS = 3;
     
-    // ==================== FXML Components ====================
+    // ==================== FXML COMPONENTS ====================
+    
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private CheckBox rememberMeCheckbox;
+    @FXML private Label errorLabel;
+    @FXML private Button loginButton;
+    
+    // ==================== SERVICES ====================
+    
+    private UserService userService;
+    
+    // ==================== STATE ====================
     
     /**
-     * Text field for username input.
-     */
-    @FXML 
-    private TextField usernameField;
-    
-    /**
-     * Password field for password input (masked).
-     */
-    @FXML 
-    private PasswordField passwordField;
-    
-    /**
-     * Checkbox for "Remember Me" functionality.
-     */
-    @FXML 
-    private CheckBox rememberMeCheckbox;
-    
-    /**
-     * Label for displaying error messages to the user.
-     */
-    @FXML 
-    private Label errorLabel;
-    
-    /**
-     * Login button - disabled during authentication and lockout.
-     */
-    @FXML 
-    private Button loginButton;
-    
-    // ==================== Services ====================
-    
-    /**
-     * UserService for authentication operations.
-     */
-    private final UserService userService;
-    
-    // Note: sessionManager and sceneManager inherited from BaseController
-    
-    // ==================== State ====================
-    
-    /**
-     * Counter for tracking consecutive failed login attempts.
-     * Resets to 0 on successful login or after lockout expires.
+     * Counter for failed login attempts.
+     * Resets on successful login or after lockout period.
      */
     private int failedAttempts = 0;
     
-    // ==================== Constructor ====================
+    // ==================== CONSTRUCTOR ====================
     
     /**
-     * Constructor - Initializes services via ServiceLocator.
-     * Called automatically by JavaFX when loading the FXML.
+     * Constructor - initializes services via ServiceLocator.
      */
     public LoginController() {
-        super(); // Initialize BaseController (sessionManager, sceneManager)
-        this.userService = ServiceLocator.getInstance().getUserService();
+        super();
     }
     
-    // ==================== Initialization ====================
+    // ==================== LIFECYCLE ====================
     
     /**
-     * Initialize method called automatically after FXML loading.
-     * Sets up the login screen with remembered username if available.
+     * Initialize method - called after FXML injection.
+     * Loads remembered username if exists and sets focus.
      */
-    @FXML
+    @Override
     public void initialize() {
-        // Load remembered username if exists
+        super.initialize();
+        this.userService = serviceLocator.getUserService();
+        // Load remembered username if "Remember Me" was checked previously
         loadRememberedUsername();
         
-        // Focus on appropriate field after UI is ready
+        // Set focus on appropriate field
         Platform.runLater(() -> {
             if (usernameField.getText().isEmpty()) {
                 usernameField.requestFocus();
@@ -143,13 +120,15 @@ public class LoginController extends BaseController {
                 passwordField.requestFocus();
             }
         });
+        
+        LOGGER.info("Login screen initialized");
     }
     
-    // ==================== Event Handlers ====================
+    // ==================== EVENT HANDLERS ====================
     
     /**
-     * Handle login button click or Enter key in password field.
-     * Validates inputs, authenticates user, and handles success/failure.
+     * Handles login button click or Enter key in password field.
+     * Validates input, authenticates user, and navigates on success.
      */
     @FXML
     private void handleLogin() {
@@ -161,13 +140,13 @@ public class LoginController extends BaseController {
         String password = passwordField.getText();
         
         if (username.isEmpty()) {
-            showError("Please enter username");
+            showError("Please enter your username");
             usernameField.requestFocus();
             return;
         }
         
         if (password.isEmpty()) {
-            showError("Please enter password");
+            showError("Please enter your password");
             passwordField.requestFocus();
             return;
         }
@@ -175,37 +154,51 @@ public class LoginController extends BaseController {
         // Disable login button during authentication
         loginButton.setDisable(true);
         
-        // Authenticate
+        // Authenticate (asynchronous to keep UI responsive)
+        authenticateUser(username, password);
+    }
+    
+    // ==================== AUTHENTICATION ====================
+    
+    /**
+     * Authenticates user credentials via UserService.
+     * 
+     * @param username Username entered by user
+     * @param password Password entered by user
+     */
+    private void authenticateUser(String username, String password) {
         try {
+            // Attempt authentication
             User user = userService.login(username, password);
             
-            if (user != null) {
-                // Success
-                onLoginSuccess(user, username);
-            } else {
-                // Invalid credentials
-                onLoginFailure("Invalid username or password");
-            }
+            // Success!
+            onLoginSuccess(user, username);
+            
+        } catch (InvalidCredentialsException e) {
+            // Invalid credentials
+            onLoginFailure("Invalid username or password");
             
         } catch (Exception e) {
+            // Unexpected error
             LOGGER.log(Level.SEVERE, "Login error", e);
-            onLoginFailure("Login failed: " + e.getMessage());
+            onLoginFailure("Login failed. Please try again.");
+            
         } finally {
+            // Re-enable login button
             loginButton.setDisable(false);
         }
     }
     
-    // ==================== Login Success/Failure Handling ====================
-    
     /**
-     * Handle successful login.
-     * Resets failed attempts, stores user in session, handles Remember Me,
-     * and navigates to main application.
+     * Handles successful login.
+     * Stores user in session, handles Remember Me, and navigates to MainLayout.
      * 
-     * @param user the authenticated User object
-     * @param username the username entered (for Remember Me)
+     * @param user Authenticated user object
+     * @param username Username that was used (for Remember Me)
      */
     private void onLoginSuccess(User user, String username) {
+        LOGGER.info("User logged in successfully: " + username);
+        
         // Reset failed attempts
         failedAttempts = 0;
         
@@ -221,119 +214,137 @@ public class LoginController extends BaseController {
         
         // Navigate to main layout
         try {
-            // TODO: Update this path if main layout FXML is in a different location
-            sceneManager.switchScene("/view/MainLayout.fxml");
-        } catch (Exception e) {
+            sceneManager.switchToMainLayout();
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Failed to load main layout", e);
-            showError("Failed to load application: " + e.getMessage());
+            showError("Failed to load application. Please restart.");
         }
     }
     
     /**
-     * Handle failed login.
-     * Tracks failed attempts and triggers lockout after 3 failures.
+     * Handles failed login attempt.
+     * Increments counter, shows error, and locks out after 3 failed attempts.
      * 
-     * @param message the error message to display
+     * @param message Error message to display to user
      */
     private void onLoginFailure(String message) {
         failedAttempts++;
         
+        LOGGER.warning("Failed login attempt " + failedAttempts + "/" + MAX_FAILED_ATTEMPTS);
+        
         if (failedAttempts >= MAX_FAILED_ATTEMPTS) {
             // Lockout after 3 failed attempts
-            loginButton.setDisable(true);
-            showError("Too many failed attempts. Please wait " + LOCKOUT_SECONDS + " seconds.");
-            
-            // Re-enable after lockout period
-            new Thread(() -> {
-                try {
-                    Thread.sleep(LOCKOUT_SECONDS * 1000);
-                    Platform.runLater(() -> {
-                        loginButton.setDisable(false);
-                        failedAttempts = 0;
-                        showError("Please try again");
-                    });
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    LOGGER.log(Level.WARNING, "Lockout thread interrupted", e);
-                }
-            }).start();
-            
+            lockoutUser();
         } else {
-            // Show error message
+            // Show error and clear password
             showError(message);
             passwordField.clear();
             passwordField.requestFocus();
-            
-            // Optional: Shake animation (can implement later)
-            // shakeLoginForm();
         }
     }
     
-    // ==================== Remember Me File Handling ====================
+    /**
+     * Locks out user for LOCKOUT_SECONDS after too many failed attempts.
+     * Re-enables login after lockout period.
+     */
+    private void lockoutUser() {
+        loginButton.setDisable(true);
+        showError("Too many failed attempts. Please wait " + LOCKOUT_SECONDS + " seconds.");
+        
+        // Re-enable after lockout period (using background thread)
+        new Thread(() -> {
+            try {
+                Thread.sleep(LOCKOUT_SECONDS * 1000);
+                
+                // Re-enable login button on JavaFX thread
+                Platform.runLater(() -> {
+                    loginButton.setDisable(false);
+                    failedAttempts = 0;
+                    showError("You can try logging in again");
+                    passwordField.requestFocus();
+                });
+                
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                LOGGER.log(Level.WARNING, "Lockout timer interrupted", e);
+            }
+        }).start();
+    }
+    
+    // ==================== REMEMBER ME FUNCTIONALITY ====================
     
     /**
-     * Load remembered username from file.
-     * If file exists and contains a username, pre-fills the username field
-     * and checks the "Remember Me" checkbox.
+     * Loads remembered username from file if it exists.
+     * Sets username field and checks Remember Me checkbox.
      */
     private void loadRememberedUsername() {
         try {
             Path path = Paths.get(REMEMBER_ME_FILE);
+            
             if (Files.exists(path)) {
                 String username = Files.readString(path).trim();
+                
                 if (!username.isEmpty()) {
                     usernameField.setText(username);
                     rememberMeCheckbox.setSelected(true);
+                    LOGGER.fine("Loaded remembered username: " + username);
                 }
             }
+            
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Failed to load remembered username", e);
-            // Don't show error to user - this is not critical
+            // Not critical - just continue without remembered username
         }
     }
     
     /**
-     * Save username to file for "Remember Me" functionality.
-     * Creates the ~/.fasee7/ directory if it doesn't exist.
+     * Saves username to file for "Remember Me" functionality.
+     * Creates directory if it doesn't exist.
      * 
-     * @param username the username to save
+     * @param username Username to save
      */
     private void saveRememberedUsername(String username) {
         try {
             Path path = Paths.get(REMEMBER_ME_FILE);
+            
+            // Create directory if it doesn't exist
             Files.createDirectories(path.getParent());
+            
+            // Write username to file
             Files.writeString(path, username);
-            LOGGER.log(Level.INFO, "Username remembered for next login");
+            
+            LOGGER.fine("Saved remembered username: " + username);
+            
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Failed to save remembered username", e);
-            // Don't show error to user - this is not critical
+            // Not critical - just continue
         }
     }
     
     /**
-     * Clear remembered username file.
-     * Called when user unchecks "Remember Me" and logs in.
+     * Clears remembered username file.
+     * Called when Remember Me is unchecked.
      */
     private void clearRememberedUsername() {
         try {
             Path path = Paths.get(REMEMBER_ME_FILE);
             Files.deleteIfExists(path);
-            LOGGER.log(Level.INFO, "Remembered username cleared");
+            LOGGER.fine("Cleared remembered username");
+            
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Failed to clear remembered username", e);
-            // Don't show error to user - this is not critical
+            // Not critical
         }
     }
     
-    // ==================== Error Display Methods ====================
+    // ==================== UI HELPERS ====================
     
     /**
-     * Show error message to user.
-     * Makes the error label visible and displays the message.
+     * Shows error message to user.
+     * Makes error label visible with the given message.
      * 
-     * @param message the error message to display
+     * @param message Error message to display
      */
-    @Override
     protected void showError(String message) {
         errorLabel.setText(message);
         errorLabel.setVisible(true);
@@ -341,22 +352,23 @@ public class LoginController extends BaseController {
     }
     
     /**
-     * Hide error message.
-     * Makes the error label invisible and removes it from layout.
+     * Hides error message.
+     * Makes error label invisible.
      */
     private void hideError() {
         errorLabel.setVisible(false);
         errorLabel.setManaged(false);
     }
     
-    // ==================== Cleanup ====================
+    // ==================== CLEANUP ====================
     
     /**
-     * Cleanup method called when controller is destroyed.
-     * No event subscriptions to unregister for LoginController.
+     * Cleanup method - called before navigation away from login screen.
+     * No event subscriptions to unregister for this controller.
      */
+    @Override
     public void cleanup() {
-        // No event subscriptions to unregister
-        // LoginController doesn't use EventBus
+        // No cleanup needed for login screen
+        super.cleanup();
     }
 }

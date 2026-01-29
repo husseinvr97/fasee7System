@@ -51,14 +51,14 @@ public class QuizServiceImpl implements QuizService {
      */
     public QuizServiceImpl(QuizDAO quizDAO, QuizQuestionDAO quizQuestionDAO,
                           QuizScoreDAO quizScoreDAO, QuizCategoryTotalDAO quizCategoryTotalDAO,
-                           AttendanceDAO attendanceDAO, UserDAO userDAO) {
+                           AttendanceDAO attendanceDAO, UserDAO userDAO , EventBusService eventBusService) {
         this.quizDAO = quizDAO;
         this.quizQuestionDAO = quizQuestionDAO;
         this.quizScoreDAO = quizScoreDAO;
         this.quizCategoryTotalDAO = quizCategoryTotalDAO;
         this.attendanceDAO = attendanceDAO;
         this.userDAO = userDAO;
-        this.eventBusService = EventBusService.getInstance();
+        this.eventBusService = eventBusService;
     }
     
     

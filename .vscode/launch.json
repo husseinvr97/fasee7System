@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch JavaFX App",
+            "request": "launch",
+            "mainClass": "com.studenttracker.Main",
+            "vmArgs": "--module-path \"C:\\Program Files\\JavaFX\\javafx-sdk-21.0.10\\lib\" --add-modules javafx.controls,javafx.fxml"
+        }
+    ]
+}

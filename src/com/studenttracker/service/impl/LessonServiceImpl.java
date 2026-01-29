@@ -27,14 +27,14 @@ public class LessonServiceImpl implements LessonService {
 
     public LessonServiceImpl(LessonDAO lessonDAO, LessonTopicDAO lessonTopicDAO, 
                             QuizDAO quizDAO, AttendanceDAO attendanceDAO, 
-                            HomeworkDAO homeworkDAO, UserDAO userDAO) {
+                            HomeworkDAO homeworkDAO, UserDAO userDAO , EventBusService eventBusService) {
         this.lessonDAO = lessonDAO;
         this.lessonTopicDAO = lessonTopicDAO;
         this.quizDAO = quizDAO;
         this.attendanceDAO = attendanceDAO;
         this.homeworkDAO = homeworkDAO;
         this.userDAO = userDAO;
-        this.eventBusService = EventBusService.getInstance();
+        this.eventBusService = eventBusService;
     }
 
     @Override

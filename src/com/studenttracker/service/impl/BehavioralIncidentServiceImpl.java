@@ -36,14 +36,14 @@ public class BehavioralIncidentServiceImpl implements BehavioralIncidentService 
                                         AttendanceDAO attendanceDAO,
                                         UserDAO userDAO,
                                         UpdateRequestDAO updateRequestDAO,
-                                        LessonDAO lessonDAO) {
+                                        LessonDAO lessonDAO , EventBusService eventBusService) {
         this.incidentDAO = incidentDAO;
         this.studentDAO = studentDAO;
         this.attendanceDAO = attendanceDAO;
         this.userDAO = userDAO;
         this.updateRequestDAO = updateRequestDAO;
         this.lessonDAO = lessonDAO;
-        this.eventBusService = EventBusService.getInstance();
+        this.eventBusService = eventBusService;
     }
     
     
