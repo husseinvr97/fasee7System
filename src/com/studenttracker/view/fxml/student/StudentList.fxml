@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<!--
+  Student List Screen FXML
+  
+  Purpose: Display, search, and filter students with action buttons
+  Controller: StudentListController
+  
+  Components:
+  - Header with Register button
+  - Search bar with type selector (Name/Phone)
+  - Filters (Status, Warnings, Date Range)
+  - Student table with actions column
+  - Result count display
+  
+  Features:
+  - Real-time search and filtering
+  - Role-based action buttons (Admin vs Assistant)
+  - Event-driven updates
+  - Warning count display per student
+-->
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.studenttracker.controller.student.StudentListController"
+      spacing="15.0" 
+      styleClass="student-list-root"
+      stylesheets="@../../css/styles.css">
+    
+    <padding>
+        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+    </padding>
+    
+    <!-- ==================== HEADER ==================== -->
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <Label text="Students" styleClass="dashboard-title">
+            <font><Font name="System Bold" size="24.0"/></font>
+        </Label>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <Button fx:id="registerButton" 
+               text="+ Register Student" 
+               onAction="#handleRegisterStudent"
+               styleClass="primary-button">
+            <font><Font size="14.0"/></font>
+        </Button>
+    </HBox>
+    
+    <!-- ==================== SEARCH & FILTER BAR ==================== -->
+    <HBox spacing="10.0" alignment="CENTER_LEFT" styleClass="metric-card">
+        <padding>
+            <Insets top="15.0" right="15.0" bottom="15.0" left="15.0"/>
+        </padding>
+        
+        <!-- Search Type -->
+        <Label text="Search by:">
+            <font><Font size="13.0"/></font>
+        </Label>
+        <ComboBox fx:id="searchTypeCombo" prefWidth="120.0"/>
+        
+        <!-- Search Field -->
+        <TextField fx:id="searchField" 
+                  promptText="Search students..."
+                  prefWidth="250.0"
+                  onAction="#handleSearch"/>
+        
+        <Button text="🔍 Search" 
+                onAction="#handleSearch" 
+                styleClass="primary-button">
+            <font><Font size="13.0"/></font>
+        </Button>
+        <Button text="Clear" 
+                onAction="#handleClearSearch" 
+                styleClass="secondary-button">
+            <font><Font size="13.0"/></font>
+        </Button>
+        
+        <Separator orientation="VERTICAL"/>
+        
+        <!-- Status Filter -->
+        <Label text="Status:">
+            <font><Font size="13.0"/></font>
+        </Label>
+        <ComboBox fx:id="statusFilterCombo" 
+                  prefWidth="120.0" 
+                  onAction="#handleFilterChange"/>
+        
+        <!-- Warning Filter -->
+        <Label text="Warnings:">
+            <font><Font size="13.0"/></font>
+        </Label>
+        <ComboBox fx:id="warningFilterCombo" 
+                  prefWidth="140.0" 
+                  onAction="#handleFilterChange"/>
+        
+        <!-- Date Range Filter -->
+        <Label text="Registered:">
+            <font><Font size="13.0"/></font>
+        </Label>
+        <DatePicker fx:id="dateFromPicker" 
+                   promptText="From" 
+                   prefWidth="130.0"
+                   onAction="#handleFilterChange"/>
+        <DatePicker fx:id="dateToPicker" 
+                   promptText="To" 
+                   prefWidth="130.0"
+                   onAction="#handleFilterChange"/>
+    </HBox>
+    
+    <!-- ==================== RESULTS SUMMARY ==================== -->
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <Label fx:id="resultCountLabel" 
+               text="Showing 0 students" 
+               styleClass="section-title">
+            <font><Font size="14.0"/></font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="🔄 Refresh" 
+                onAction="#handleRefresh" 
+                styleClass="refresh-button">
+            <font><Font size="13.0"/></font>
+        </Button>
+    </HBox>
+    
+    <!-- ==================== STUDENT TABLE ==================== -->
+    <TableView fx:id="studentTable" 
+               VBox.vgrow="ALWAYS" 
+               styleClass="table-view">
+        <columns>
+            <TableColumn fx:id="idColumn" 
+                        text="ID" 
+                        prefWidth="60.0" 
+                        sortable="true"/>
+            <TableColumn fx:id="nameColumn" 
+                        text="Full Name" 
+                        prefWidth="200.0" 
+                        sortable="true"/>
+            <TableColumn fx:id="phoneColumn" 
+                        text="Phone" 
+                        prefWidth="120.0" 
+                        sortable="false"/>
+            <TableColumn fx:id="parentPhoneColumn" 
+                        text="Parent Phone" 
+                        prefWidth="120.0" 
+                        sortable="false"/>
+            <TableColumn fx:id="statusColumn" 
+                        text="Status" 
+                        prefWidth="100.0" 
+                        sortable="true"/>
+            <TableColumn fx:id="registrationDateColumn" 
+                        text="Registered" 
+                        prefWidth="120.0" 
+                        sortable="true"/>
+            <TableColumn fx:id="warningsColumn" 
+                        text="Warnings" 
+                        prefWidth="80.0" 
+                        sortable="true"/>
+            <TableColumn fx:id="actionsColumn" 
+                        text="Actions" 
+                        prefWidth="280.0" 
+                        sortable="false"/>
+        </columns>
+        
+        <placeholder>
+            <VBox alignment="CENTER" spacing="10.0">
+                <padding>
+                    <Insets top="30.0" bottom="30.0"/>
+                </padding>
+                <Label text="No students found" styleClass="section-title">
+                    <font><Font size="16.0"/></font>
+                </Label>
+                <Label text="Try adjusting your search or filters">
+                    <font><Font size="13.0"/></font>
+                </Label>
+            </VBox>
+        </placeholder>
+    </TableView>
+</VBox>

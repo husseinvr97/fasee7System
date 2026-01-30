@@ -399,11 +399,14 @@ public class SceneManager {
             
             // Students
             case "StudentList":
-                return "/com/studenttracker/view/fxml/students/StudentList.fxml";
+                return "/com/studenttracker/view/fxml/student/StudentList.fxml";
             case "StudentRegistration":
-                return "/com/studenttracker/view/fxml/students/StudentRegistration.fxml";
+                return "/com/studenttracker/view/fxml/student/StudentRegistration.fxml";
             case "StudentDetail":
-                return "/com/studenttracker/view/fxml/students/StudentDetail.fxml";
+                return "/com/studenttracker/view/fxml/student/StudentDetail.fxml";
+
+            case "StudentLessonsTab":
+                return "/com/studenttracker/view/fxml/student/tabs/StudentLessonsTab.fxml";
             
             // Lessons
             case "LessonList":

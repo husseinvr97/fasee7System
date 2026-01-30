@@ -182,8 +182,7 @@ public class MainLayoutController extends BaseController {
      */
     @FXML
     private void showStudents() {
-        showPlaceholder("Students", "Student List screen will be available soon");
-        setActiveButton(studentsBtn);
+        loadView("StudentList", studentsBtn);
     }
     
     /**

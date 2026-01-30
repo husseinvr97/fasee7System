@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.studenttracker.controller.student.tabs.StudentLessonsTabController"
+      spacing="10.0"
+      styleClass="lessons-tab">
+    
+    <padding>
+        <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
+    </padding>
+    
+    <!-- Search & Filter Bar -->
+    <HBox spacing="10.0" alignment="CENTER_LEFT" styleClass="filter-bar">
+        <Label text="Search:" styleClass="filter-label"/>
+        <DatePicker fx:id="dateFromPicker" promptText="From Date" prefWidth="130.0"/>
+        <DatePicker fx:id="dateToPicker" promptText="To Date" prefWidth="130.0"/>
+        
+        <Label text="Filter:" styleClass="filter-label"/>
+        <ComboBox fx:id="filterCombo" prefWidth="150.0" promptText="Select filter">
+            <items>
+                <javafx.collections.FXCollections fx:factory="observableArrayList">
+                    <String fx:value="All"/>
+                    <String fx:value="Attended Only"/>
+                    <String fx:value="Absent Only"/>
+                    <String fx:value="Done Homework"/>
+                    <String fx:value="Quiz Score > 70%"/>
+                </javafx.collections.FXCollections>
+            </items>
+        </ComboBox>
+        
+        <Button text="Apply" onAction="#handleApplyFilter" styleClass="primary-button"/>
+        <Button text="Clear" onAction="#handleClearFilter" styleClass="secondary-button"/>
+    </HBox>
+    
+    <!-- Lessons Table -->
+    <TableView fx:id="lessonsTable" VBox.vgrow="ALWAYS" styleClass="lessons-table">
+        <columns>
+            <TableColumn fx:id="dateColumn" text="Date" prefWidth="100.0" sortable="true"/>
+            <TableColumn fx:id="topicsColumn" text="Topics" prefWidth="250.0" sortable="false"/>
+            <TableColumn fx:id="attendanceColumn" text="Attendance" prefWidth="100.0" sortable="true"/>
+            <TableColumn fx:id="homeworkColumn" text="Homework" prefWidth="120.0" sortable="true"/>
+            <TableColumn fx:id="quizColumn" text="Quiz Score" prefWidth="100.0" sortable="true"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="100.0" sortable="false"/>
+        </columns>
+        <placeholder>
+            <Label text="No lessons found" styleClass="placeholder-label"/>
+        </placeholder>
+    </TableView>
+    
+    <!-- Pagination Controls -->
+    <HBox spacing="10.0" alignment="CENTER" styleClass="pagination-bar">
+        <Button fx:id="firstPageBtn" text="«" onAction="#handleFirstPage" styleClass="pagination-button" minWidth="35.0"/>
+        <Button fx:id="prevPageBtn" text="‹" onAction="#handlePrevPage" styleClass="pagination-button" minWidth="35.0"/>
+        <Label fx:id="pageLabel" text="Page 1 of 1" styleClass="page-label"/>
+        <Button fx:id="nextPageBtn" text="›" onAction="#handleNextPage" styleClass="pagination-button" minWidth="35.0"/>
+        <Button fx:id="lastPageBtn" text="»" onAction="#handleLastPage" styleClass="pagination-button" minWidth="35.0"/>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <Label text="Per page:" styleClass="page-size-label"/>
+        <ComboBox fx:id="pageSizeCombo" prefWidth="80.0" onAction="#handlePageSizeChange">
+            <items>
+                <javafx.collections.FXCollections fx:factory="observableArrayList">
+                    <String fx:value="10"/>
+                    <String fx:value="20"/>
+                    <String fx:value="50"/>
+                </javafx.collections.FXCollections>
+            </items>
+        </ComboBox>
+    </HBox>
+</VBox>
