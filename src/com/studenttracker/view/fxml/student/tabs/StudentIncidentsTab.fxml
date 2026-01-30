@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.studenttracker.controller.student.tabs.StudentIncidentsTabController"
+      spacing="10.0"
+      styleClass="incidents-tab">
+    
+    <padding>
+        <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
+    </padding>
+    
+    <!-- Header Section -->
+    <HBox spacing="10.0" alignment="CENTER_LEFT" styleClass="incidents-header">
+        <Label text="Total Incidents:" styleClass="incidents-label"/>
+        <Label fx:id="totalIncidentsLabel" text="0" styleClass="incidents-count"/>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <Button fx:id="refreshButton" text="↻ Refresh" onAction="#handleRefresh" styleClass="refresh-button"/>
+    </HBox>
+    
+    <!-- Incidents Table -->
+    <TableView fx:id="incidentsTable" VBox.vgrow="ALWAYS" styleClass="incidents-table">
+        <columns>
+            <TableColumn fx:id="dateColumn" text="Date" prefWidth="120.0" sortable="true"/>
+            <TableColumn fx:id="lessonColumn" text="Lesson" prefWidth="100.0" sortable="false"/>
+            <TableColumn fx:id="typeColumn" text="Type" prefWidth="150.0" sortable="true"/>
+            <TableColumn fx:id="notesColumn" text="Notes" prefWidth="300.0" sortable="false"/>
+            <TableColumn fx:id="createdByColumn" text="Reported By" prefWidth="150.0" sortable="false"/>
+        </columns>
+        <placeholder>
+            <Label text="No behavioral incidents recorded" styleClass="empty-table-message"/>
+        </placeholder>
+    </TableView>
+</VBox>
