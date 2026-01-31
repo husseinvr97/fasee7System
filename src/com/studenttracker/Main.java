@@ -2,7 +2,6 @@ package com.studenttracker;
 
 import com.studenttracker.util.DatabaseConnection;
 import com.studenttracker.util.SceneManager;
-import com.studenttracker.util.SessionManager;
 
 import javafx.application.Application;
 import javafx.stage.Stage;

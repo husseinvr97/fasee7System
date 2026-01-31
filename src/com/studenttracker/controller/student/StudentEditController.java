@@ -11,7 +11,6 @@ import com.studenttracker.service.event.StudentUpdatedEvent;
 import com.studenttracker.util.AlertHelper;
 import com.studenttracker.util.ServiceLocator;
 
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;

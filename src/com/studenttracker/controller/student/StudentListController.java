@@ -3,7 +3,6 @@ package com.studenttracker.controller.student;
 import com.google.common.eventbus.Subscribe;
 import com.studenttracker.controller.BaseController;
 import com.studenttracker.model.Student;
-import com.studenttracker.model.Student.StudentStatus;
 import com.studenttracker.service.*;
 import com.studenttracker.service.event.*;
 import com.studenttracker.util.SceneManager;

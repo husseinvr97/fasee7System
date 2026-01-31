@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<!--
+  Lesson List Screen FXML
+  
+  Purpose: Display, search, and filter lessons with action buttons
+  Controller: LessonListController
+  
+  Components:
+  - Header with Create Lesson button (Admin only)
+  - Search bar (Date range + Topic search)
+  - Filter controls (Quiz, Homework, Month Group)
+  - Lesson table with actions column
+  - Result count display
+  
+  Features:
+  - Date range search
+  - Topic category and text search
+  - Quiz/Homework/Month filters
+  - Real-time filtering
+  - Event-driven updates
+-->
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.studenttracker.controller.lesson.LessonListController"
+      spacing="15.0" 
+      styleClass="lesson-list-root"
+      stylesheets="@../../css/styles.css">
+    
+    <padding>
+        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+    </padding>
+    
+    <!-- ==================== HEADER ==================== -->
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <Label text="Lessons" styleClass="dashboard-title">
+            <font><Font name="System Bold" size="24.0"/></font>
+        </Label>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <!-- Admin Only: Create Lesson Button -->
+        <Button fx:id="createLessonButton" 
+               text="+ Create Lesson" 
+               onAction="#handleCreateLesson"
+               styleClass="primary-button"
+               visible="false"
+               managed="false">
+            <font><Font size="14.0"/></font>
+        </Button>
+    </HBox>
+    
+    <!-- ==================== SEARCH & FILTER BAR ==================== -->
+    <VBox spacing="10.0" styleClass="metric-card">
+        <padding>
+            <Insets top="15.0" right="15.0" bottom="15.0" left="15.0"/>
+        </padding>
+        
+        <!-- Search Row -->
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+            <Label text="Search:">
+                <font><Font size="13.0"/></font>
+            </Label>
+            
+            <Label text="Date:">
+                <font><Font size="13.0"/></font>
+            </Label>
+            <DatePicker fx:id="dateFromPicker" 
+                       promptText="From" 
+                       prefWidth="130.0"
+                       onAction="#handleSearch"/>
+            <DatePicker fx:id="dateToPicker" 
+                       promptText="To" 
+                       prefWidth="130.0"
+                       onAction="#handleSearch"/>
+            
+            <Separator orientation="VERTICAL"/>
+            
+            <Label text="Topics:">
+                <font><Font size="13.0"/></font>
+            </Label>
+            <ComboBox fx:id="topicCategoryCombo" 
+         promptText="Category" 
+         prefWidth="120.0"
+         onAction="#handleSearch"/>
+            
+            <TextField fx:id="topicSearchField" 
+                      promptText="Search topic text..."
+                      prefWidth="200.0"
+                      onAction="#handleSearch"/>
+            
+            <Button text=" Search" 
+                   onAction="#handleSearch" 
+                   styleClass="primary-button">
+                <font><Font size="13.0"/></font>
+            </Button>
+            <Button text="Clear" 
+                   onAction="#handleClearSearch" 
+                   styleClass="secondary-button">
+                <font><Font size="13.0"/></font>
+            </Button>
+        </HBox>
+        
+        <!-- Filter Row -->
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+            <Label text="Filter:">
+                <font><Font size="13.0"/></font>
+            </Label>
+            
+            <Label text="Quiz:">
+                <font><Font size="13.0"/></font>
+            </Label>
+            <ComboBox fx:id="quizFilterCombo" 
+         prefWidth="100.0" 
+         onAction="#handleFilterChange"/>
+            
+            <Label text="Homework:">
+                <font><Font size="13.0"/></font>
+            </Label>
+            <ComboBox fx:id="homeworkFilterCombo" 
+         prefWidth="100.0" 
+         onAction="#handleFilterChange"/>
+            
+            <Label text="Month:">
+                <font><Font size="13.0"/></font>
+            </Label>
+            <ComboBox fx:id="monthGroupCombo" 
+                     promptText="Select month" 
+                     prefWidth="150.0"
+                     onAction="#handleFilterChange"/>
+        </HBox>
+    </VBox>
+    
+    <!-- ==================== RESULTS SUMMARY ==================== -->
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <Label fx:id="resultCountLabel" 
+               text="Showing 0 lessons" 
+               styleClass="section-title">
+            <font><Font size="14.0"/></font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text=" Refresh" 
+                onAction="#handleRefresh" 
+                styleClass="refresh-button">
+            <font><Font size="13.0"/></font>
+        </Button>
+    </HBox>
+    
+    <!-- ==================== LESSONS TABLE ==================== -->
+    <TableView fx:id="lessonsTable" 
+               VBox.vgrow="ALWAYS" 
+               styleClass="table-view">
+        <columns>
+            <TableColumn fx:id="idColumn" 
+                        text="ID" 
+                        prefWidth="50.0" 
+                        sortable="true"/>
+            <TableColumn fx:id="dateColumn" 
+                        text="Date" 
+                        prefWidth="120.0" 
+                        sortable="true"/>
+            <TableColumn fx:id="monthGroupColumn" 
+                        text="Month Group" 
+                        prefWidth="130.0" 
+                        sortable="true"/>
+            <TableColumn fx:id="topicsColumn" 
+                        text="Topics" 
+                        prefWidth="300.0" 
+                        sortable="false"/>
+            <TableColumn fx:id="typeColumn" 
+                        text="Type" 
+                        prefWidth="120.0" 
+                        sortable="false"/>
+            <TableColumn fx:id="attendanceColumn" 
+                        text="Attendance" 
+                        prefWidth="100.0" 
+                        sortable="true"/>
+            <TableColumn fx:id="actionsColumn" 
+                        text="Actions" 
+                        prefWidth="200.0" 
+                        sortable="false"/>
+        </columns>
+        
+        <placeholder>
+            <VBox alignment="CENTER" spacing="10.0">
+                <padding>
+                    <Insets top="30.0" bottom="30.0"/>
+                </padding>
+                <Label text="No lessons found" styleClass="section-title">
+                    <font><Font size="16.0"/></font>
+                </Label>
+                <Label text="Try adjusting your search or filters">
+                    <font><Font size="13.0"/></font>
+                </Label>
+            </VBox>
+        </placeholder>
+    </TableView>
+</VBox>
