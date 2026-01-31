@@ -617,3 +617,166 @@
 .card:hover {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 20, 0, 0, 5);
 }
+
+
+/* ==================== STUDENT PROFILE SCREEN ==================== */
+
+.profile-root {
+    -fx-background-color: transparent;
+}
+
+.back-button {
+    -fx-background-color: white;
+    -fx-text-fill: #475569;
+    -fx-background-radius: 8;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 8;
+    -fx-border-width: 1.5;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 8, 0, 0, 2);
+}
+
+.back-button:hover {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #3b82f6;
+    -fx-text-fill: #1e293b;
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.15), 10, 0, 0, 3);
+}
+
+.back-button:pressed {
+    -fx-background-color: #e2e8f0;
+}
+
+.edit-button {
+    -fx-background-color: linear-gradient(to bottom, #f59e0b 0%, #d97706 100%);
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(245, 158, 11, 0.4), 10, 0, 0, 3);
+}
+
+.edit-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #d97706 0%, #b45309 100%);
+    -fx-effect: dropshadow(gaussian, rgba(245, 158, 11, 0.5), 12, 0, 0, 5);
+}
+
+.edit-button:pressed {
+    -fx-background-color: #b45309;
+}
+
+.page-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-weight: bold;
+}
+
+.info-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 15, 0, 0, 3);
+}
+
+.info-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 20, 0, 0, 5);
+}
+
+.card-title {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-letter-spacing: 0.5px;
+}
+
+.info-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+}
+
+.info-value {
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+
+.info-value-success {
+    -fx-text-fill: #10b981;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+.info-value-danger {
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+.warning-badge {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #991b1b;
+    -fx-background-radius: 12;
+    -fx-padding: 3 10 3 10;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+}
+
+.warnings-list {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+
+.warnings-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #334155;
+    -fx-padding: 8;
+    -fx-font-size: 13px;
+}
+
+.warnings-list .list-cell:hover {
+    -fx-background-color: #f8fafc;
+}
+
+.rank-display {
+    -fx-text-fill: #3b82f6;
+    -fx-font-weight: bold;
+}
+
+.rank-subtitle {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 12px;
+}
+
+.profile-tabs {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 15, 0, 0, 3);
+}
+
+.profile-tabs .tab-pane .tab-header-area {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.profile-tabs .tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: #64748b;
+    -fx-font-weight: 600;
+}
+
+.profile-tabs .tab:selected {
+    -fx-background-color: white;
+    -fx-text-fill: #3b82f6;
+}
+
+.profile-tabs .tab:hover {
+    -fx-text-fill: #1e293b;
+}

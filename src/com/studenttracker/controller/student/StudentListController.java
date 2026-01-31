@@ -6,6 +6,8 @@ import com.studenttracker.model.Student;
 import com.studenttracker.model.Student.StudentStatus;
 import com.studenttracker.service.*;
 import com.studenttracker.service.event.*;
+import com.studenttracker.util.SceneManager;
+
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -514,15 +516,44 @@ private void handleRegisterStudent() {
      * Handles View Student button click.
      * Navigates to StudentDetail screen (read-only for all users).
      */
+    /**
+     * Handles View Student button click.
+     * Navigates to StudentProfile screen.
+     * 
+     * @param studentId The ID of the student to view
+     */
     private void handleViewStudent(Integer studentId) {
         try {
-            LOGGER.info("Viewing student: " + studentId);
-            // TODO: Navigate to StudentDetail screen with studentId parameter
-            // sceneManager.loadViewIntoContainer("StudentDetail", contentArea);
-            showInfo("View Student", "Student detail view will be implemented in next phase.");
+            LOGGER.info("Viewing student profile for ID: " + studentId);
+            
+            // Load StudentProfile view into container
+            SceneManager.LoadResult<StudentProfileController> result = 
+                sceneManager.loadContentWithController("/com/studenttracker/view/fxml/student/StudentProfile.fxml");
+            
+            // Get the controller and set student ID
+            StudentProfileController controller = result.getController();
+            if (controller != null) {
+                controller.setStudentId(studentId);
+                
+                // Find the content area in MainLayout and load the profile view
+                javafx.scene.layout.StackPane contentArea = 
+                    (javafx.scene.layout.StackPane) studentTable.getScene().getRoot().lookup("#contentArea");
+                
+                if (contentArea != null) {
+                    contentArea.getChildren().clear();
+                    contentArea.getChildren().add(result.getParent());
+                } else {
+                    LOGGER.warning("Content area not found in scene");
+                    showError("Navigation error: Content area not found");
+                }
+            } else {
+                LOGGER.warning("StudentProfileController is null");
+                showError("Failed to load student profile controller");
+            }
+            
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Failed to view student", e);
-            showError("Failed to open student details.");
+            LOGGER.log(Level.SEVERE, "Failed to view student profile", e);
+            showError("Failed to open student profile: " + e.getMessage());
         }
     }
     

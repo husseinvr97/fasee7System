@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.studenttracker.controller.student.StudentProfileController"
+      spacing="15.0" styleClass="profile-root">
+    
+    <padding>
+        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+    </padding>
+    
+    <!-- Header -->
+    <HBox spacing="10.0" alignment="CENTER_LEFT">
+        <Button text="← Back" onAction="#handleBack" styleClass="back-button"/>
+        <Label fx:id="studentNameLabel" text="Student: محمد أحمد علي حسن" styleClass="page-title">
+            <font><Font name="System Bold" size="24.0"/></font>
+        </Label>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <!-- Edit button (Admin only) -->
+        <Button fx:id="editButton" 
+               text="✏ Edit" 
+               onAction="#handleEdit"
+               styleClass="edit-button"
+               visible="false"/>
+    </HBox>
+    
+    <!-- Info Cards -->
+    <GridPane hgap="15.0" vgap="15.0">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="25"/>
+            <ColumnConstraints percentWidth="25"/>
+            <ColumnConstraints percentWidth="25"/>
+            <ColumnConstraints percentWidth="25"/>
+        </columnConstraints>
+        
+        <!-- Personal Info Card -->
+        <VBox styleClass="info-card" GridPane.columnIndex="0">
+            <padding><Insets top="15.0" right="15.0" bottom="15.0" left="15.0"/></padding>
+            <Label text="STUDENT INFO" styleClass="card-title"/>
+            <Separator/>
+            <GridPane vgap="8.0" hgap="10.0">
+                <Label text="ID:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label fx:id="studentIdLabel" text="001" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                
+                <Label text="Phone:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label fx:id="phoneLabel" text="01012345678" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                
+                <Label text="Parent:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label fx:id="parentPhoneLabel" text="01098765432" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                
+                <Label text="Status:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <Label fx:id="statusLabel" text="ACTIVE" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                
+                <Label text="Registered:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <Label fx:id="registrationDateLabel" text="Sep 01, 2024" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+            </GridPane>
+        </VBox>
+        
+        <!-- Attendance Summary Card -->
+        <VBox styleClass="info-card" GridPane.columnIndex="1">
+            <padding><Insets top="15.0" right="15.0" bottom="15.0" left="15.0"/></padding>
+            <Label text="ATTENDANCE SUMMARY" styleClass="card-title"/>
+            <Separator/>
+            <GridPane vgap="8.0" hgap="10.0">
+                <Label text="Total:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label fx:id="totalLessonsLabel" text="48" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                
+                <Label text="Attended:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label fx:id="attendedLabel" text="45" styleClass="info-value-success" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                
+                <Label text="Absent:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label fx:id="absentLabel" text="3" styleClass="info-value-danger" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                
+                <Label text="Rate:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <Label fx:id="attendanceRateLabel" text="93.75%" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                
+                <Label text="Consecutive:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <Label fx:id="consecutiveAbsencesLabel" text="0" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+            </GridPane>
+        </VBox>
+        
+        <!-- Warnings Card -->
+        <VBox styleClass="info-card" GridPane.columnIndex="2">
+            <padding><Insets top="15.0" right="15.0" bottom="15.0" left="15.0"/></padding>
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <Label text="ACTIVE WARNINGS" styleClass="card-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="warningCountBadge" text="1" styleClass="warning-badge"/>
+            </HBox>
+            <Separator/>
+            <ListView fx:id="warningsListView" 
+                     styleClass="warnings-list"
+                     VBox.vgrow="ALWAYS">
+                <placeholder>
+                    <Label text="No active warnings"/>
+                </placeholder>
+            </ListView>
+        </VBox>
+        
+        <!-- Fasee7 Rank Card -->
+        <VBox styleClass="info-card" GridPane.columnIndex="3">
+            <padding><Insets top="15.0" right="15.0" bottom="15.0" left="15.0"/></padding>
+            <Label text="FASEE7 RANKING" styleClass="card-title"/>
+            <Separator/>
+            <VBox alignment="CENTER" spacing="10.0">
+                <Label fx:id="rankLabel" text="8th" styleClass="rank-display">
+                    <font><Font name="System Bold" size="36.0"/></font>
+                </Label>
+                <Label text="out of 152 students" styleClass="rank-subtitle"/>
+                <Separator prefWidth="100.0"/>
+                <GridPane vgap="5.0" hgap="10.0">
+                    <Label text="Total:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Label fx:id="totalPointsLabel" text="172" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    
+                    <Label text="Quiz:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <Label fx:id="quizPointsLabel" text="85" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    
+                    <Label text="Attendance:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <Label fx:id="attendancePointsLabel" text="45" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    
+                    <Label text="Homework:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <Label fx:id="homeworkPointsLabel" text="39" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    
+                    <Label text="Targets:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                    <Label fx:id="targetPointsLabel" text="3" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                </GridPane>
+            </VBox>
+        </VBox>
+    </GridPane>
+    
+    <!-- Tabs -->
+    <TabPane fx:id="tabPane" VBox.vgrow="ALWAYS" styleClass="profile-tabs">
+        
+        <!-- Lessons Tab -->
+        <Tab text="Lessons" closable="false">
+            <fx:include source="tabs/StudentLessonsTab.fxml"/>
+        </Tab>
+        
+        <!-- Incidents Tab -->
+        <Tab text="Behavioral Incidents" closable="false">
+            <fx:include source="tabs/StudentIncidentsTab.fxml"/>
+        </Tab>
+        
+        <!-- Performance Tab - Hidden for Phase 2 -->
+        <!-- Will be enabled in Phase 7 -->
+        <!--
+        <Tab text="Performance Analysis" closable="false">
+            <fx:include source="tabs/StudentPerformanceTab.fxml"/>
+        </Tab>
+        -->
+        
+        <!-- Targets Tab - Hidden for Phase 2 -->
+        <!-- Will be enabled in Phase 7 -->
+        <!--
+        <Tab text="Targets & Achievements" closable="false">
+            <fx:include source="tabs/StudentTargetsTab.fxml"/>
+        </Tab>
+        -->
+    </TabPane>
+</VBox>
