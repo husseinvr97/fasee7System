@@ -687,11 +687,8 @@ public class StudentProfileController extends BaseController {
      * @param event The student updated event (not defined in provided files, assuming it exists)
      */
     @Subscribe
-    public void onStudentUpdated(com.studenttracker.service.event.UpdateRequestApprovedEvent event) {
-
-        if(!event.getEntityType().toLowerCase().equals("student"))
-            return;
-        if (event != null && event.getEntityId() != null && event.getEntityId() == studentId) {
+    public void onStudentUpdated(com.studenttracker.service.event.StudentUpdatedEvent event) {
+        if (event != null && event.getStudentId() != null && event.getStudentId() == studentId) {
             LOGGER.info("Student updated event received for student: " + studentId);
             
             Platform.runLater(() -> {
