@@ -21,17 +21,7 @@
         <DatePicker fx:id="dateToPicker" promptText="To Date" prefWidth="130.0"/>
         
         <Label text="Filter:" styleClass="filter-label"/>
-        <ComboBox fx:id="filterCombo" prefWidth="150.0" promptText="Select filter">
-            <items>
-                <javafx.collections.FXCollections fx:factory="observableArrayList">
-                    <String fx:value="All"/>
-                    <String fx:value="Attended Only"/>
-                    <String fx:value="Absent Only"/>
-                    <String fx:value="Done Homework"/>
-                    <String fx:value="Quiz Score > 70%"/>
-                </javafx.collections.FXCollections>
-            </items>
-        </ComboBox>
+        <ComboBox fx:id="filterCombo" prefWidth="150.0" promptText="Select filter"/>
         
         <Button text="Apply" onAction="#handleApplyFilter" styleClass="primary-button"/>
         <Button text="Clear" onAction="#handleClearFilter" styleClass="secondary-button"/>
@@ -63,14 +53,6 @@
         <Region HBox.hgrow="ALWAYS"/>
         
         <Label text="Per page:" styleClass="page-size-label"/>
-        <ComboBox fx:id="pageSizeCombo" prefWidth="80.0" onAction="#handlePageSizeChange">
-            <items>
-                <javafx.collections.FXCollections fx:factory="observableArrayList">
-                    <String fx:value="10"/>
-                    <String fx:value="20"/>
-                    <String fx:value="50"/>
-                </javafx.collections.FXCollections>
-            </items>
-        </ComboBox>
+        <ComboBox fx:id="pageSizeCombo" prefWidth="80.0" onAction="#handlePageSizeChange"/>
     </HBox>
 </VBox>

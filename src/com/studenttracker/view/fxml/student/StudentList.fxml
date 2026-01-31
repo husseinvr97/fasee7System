@@ -59,10 +59,10 @@
         </padding>
         
         <!-- Search Type -->
-        <Label text="Search by:">
-            <font><Font size="13.0"/></font>
-        </Label>
-        <ComboBox fx:id="searchTypeCombo" prefWidth="120.0"/>
+        <Label text="Search by:" minWidth="65">
+    <font><Font size="12.0"/></font>
+</Label>
+        <ComboBox fx:id="searchTypeCombo" prefWidth="100.0" minWidth="100.0"/>
         
         <!-- Search Field -->
         <TextField fx:id="searchField" 
@@ -70,39 +70,43 @@
                   prefWidth="250.0"
                   onAction="#handleSearch"/>
         
-        <Button text="🔍 Search" 
-                onAction="#handleSearch" 
-                styleClass="primary-button">
-            <font><Font size="13.0"/></font>
-        </Button>
+        <Button text="Search" 
+        minWidth="75"
+        onAction="#handleSearch" 
+        styleClass="primary-button">
+    <font><Font size="13.0"/></font>
+</Button>
         <Button text="Clear" 
-                onAction="#handleClearSearch" 
-                styleClass="secondary-button">
-            <font><Font size="13.0"/></font>
-        </Button>
+        minWidth="65"
+        onAction="#handleClearSearch" 
+        styleClass="secondary-button">
+    <font><Font size="13.0"/></font>
+</Button>
         
         <Separator orientation="VERTICAL"/>
         
         <!-- Status Filter -->
-        <Label text="Status:">
-            <font><Font size="13.0"/></font>
-        </Label>
+        <Label text="Status:" minWidth="50">
+    <font><Font size="12.0"/></font>
+</Label>
         <ComboBox fx:id="statusFilterCombo" 
-                  prefWidth="120.0" 
-                  onAction="#handleFilterChange"/>
+          prefWidth="100.0" 
+          minWidth="100.0"
+          onAction="#handleFilterChange"/>
         
         <!-- Warning Filter -->
-        <Label text="Warnings:">
-            <font><Font size="13.0"/></font>
-        </Label>
+        <Label text="Warnings:" minWidth="70">
+    <font><Font size="12.0"/></font>
+</Label>
         <ComboBox fx:id="warningFilterCombo" 
-                  prefWidth="140.0" 
-                  onAction="#handleFilterChange"/>
+          prefWidth="140.0"
+          minWidth="140.0"
+          onAction="#handleFilterChange"/>
         
         <!-- Date Range Filter -->
-        <Label text="Registered:">
-            <font><Font size="13.0"/></font>
-        </Label>
+        <Label text="Registered:" minWidth="75">
+    <font><Font size="12.0"/></font>
+</Label>
         <DatePicker fx:id="dateFromPicker" 
                    promptText="From" 
                    prefWidth="130.0"
@@ -121,7 +125,7 @@
             <font><Font size="14.0"/></font>
         </Label>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button text="🔄 Refresh" 
+        <Button text=" Refresh" 
                 onAction="#handleRefresh" 
                 styleClass="refresh-button">
             <font><Font size="13.0"/></font>

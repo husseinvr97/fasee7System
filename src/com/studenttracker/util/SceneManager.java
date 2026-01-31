@@ -404,6 +404,8 @@ public class SceneManager {
                 return "/com/studenttracker/view/fxml/student/StudentRegistration.fxml";
             case "StudentProfile":
                 return "/com/studenttracker/view/fxml/student/StudentProfile.fxml";
+            case "StudentEdit":
+                return "/com/studenttracker/view/fxml/student/StudentEdit.fxml";
 
             case "StudentLessonsTab":
                 return "/com/studenttracker/view/fxml/student/tabs/StudentLessonsTab.fxml";

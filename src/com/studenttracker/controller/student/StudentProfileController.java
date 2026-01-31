@@ -640,41 +640,72 @@ public class StudentProfileController extends BaseController {
      * Navigates back to previous screen using SceneManager.
      */
     @FXML
-    private void handleBack() {
-        try {
-            LOGGER.info("Back button clicked");
-            sceneManager.switchScene("/com/studenttracker/view/fxml/student/StudentList.fxml");
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Failed to navigate back", e);
-            showError("Failed to navigate back: " + e.getMessage());
+private void handleBack() {
+    try {
+        LOGGER.info("Back button clicked");
+        
+        // Find the content area from the current scene
+        javafx.scene.Scene currentScene = studentNameLabel.getScene();
+        javafx.scene.layout.StackPane contentArea = 
+            (javafx.scene.layout.StackPane) currentScene.lookup("#contentArea");
+        
+        if (contentArea != null) {
+            sceneManager.loadViewIntoContainer("StudentList", contentArea);
+        } else {
+            LOGGER.warning("Content area not found in scene");
+            showError("Navigation error - please restart the application");
         }
+        
+    } catch (Exception e) {
+        LOGGER.log(Level.SEVERE, "Failed to navigate back", e);
+        showError("Failed to navigate back: " + e.getMessage());
     }
+}
     
     /**
-     * Handle Edit button click.
-     * Opens student edit modal dialog.
-     * 
-     * <p><b>Note:</b> Only visible to admin users</p>
-     */
-    @FXML
-    private void handleEdit() {
-        try {
-            LOGGER.info("Edit button clicked for student: " + studentId);
-            
-            // Show edit modal
-            sceneManager.showDialog(
-                "/com/studenttracker/view/fxml/student/StudentEdit.fxml",
-                "Edit Student"
-            );
-            
-            // Reload profile after edit (in case data changed)
-            loadStudentProfile();
-            
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Failed to open edit modal", e);
-            showError("Failed to open edit form: " + e.getMessage());
-        }
+ * Handle Edit button click.
+ * Opens student edit modal dialog.
+ * 
+ * <p><b>Note:</b> Only visible to admin users</p>
+ */
+@FXML
+private void handleEdit() {
+    try {
+        LOGGER.info("Edit button clicked for student: " + studentId);
+        
+        // Load FXML and get controller
+        javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+            getClass().getResource("/com/studenttracker/view/fxml/student/StudentEdit.fxml")
+        );
+        javafx.scene.Parent root = loader.load();
+        
+        // Get controller and set student ID
+        com.studenttracker.controller.student.StudentEditController controller = loader.getController();
+        
+        // Create modal stage
+        javafx.stage.Stage dialogStage = new javafx.stage.Stage();
+        dialogStage.setTitle("Edit Student");
+        dialogStage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+        dialogStage.initOwner(sceneManager.getPrimaryStage());
+        
+        // Set dialog stage in controller
+        controller.setDialogStage(dialogStage);
+        
+        // Set student ID (this will load the data)
+        controller.setStudentId(studentId);
+        
+        // Show modal
+        javafx.scene.Scene scene = new javafx.scene.Scene(root);
+        dialogStage.setScene(scene);
+        dialogStage.showAndWait();
+        
+        // No need to reload - EventBus will update automatically via onStudentUpdated()
+        
+    } catch (Exception e) {
+        LOGGER.log(Level.SEVERE, "Failed to open edit modal", e);
+        showError("Failed to open edit form: " + e.getMessage());
     }
+}
     
     // ==================== EVENT SUBSCRIBERS (EventBus) ====================
     

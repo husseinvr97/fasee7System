@@ -232,10 +232,10 @@ public class StudentListController extends BaseController {
         
         // Actions Column (with role-based buttons)
         actionsColumn.setCellFactory(column -> new TableCell<StudentRow, Void>() {
-            private final Button viewButton = new Button("👁 View");
-            private final Button editButton = new Button("✏ Edit");
-            private final Button archiveButton = new Button("📦 Archive");
-            private final Button restoreButton = new Button("♻ Restore");
+            private final Button viewButton = new Button("View");
+private final Button editButton = new Button("Edit");
+private final Button archiveButton = new Button("Archive");
+private final Button restoreButton = new Button("Restore");
             private final HBox buttonBox = new HBox(5, viewButton, editButton, archiveButton, restoreButton);
             
             {
@@ -558,33 +558,60 @@ private void handleRegisterStudent() {
     }
     
     /**
-     * Handles Edit Student button click.
-     * Admin: Allows direct edit
-     * Assistant: Submits update request for admin approval
-     */
-    private void handleEditStudent(Integer studentId) {
-        if (isAdmin()) {
-            // Admin can edit directly
-            try {
-                LOGGER.info("Admin editing student: " + studentId);
-                // TODO: Navigate to StudentEdit screen or open edit dialog
-                showInfo("Edit Student", "Student edit functionality will be implemented in next phase.");
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, "Failed to edit student", e);
-                showError("Failed to open edit form.");
-            }
-        } else {
-            // Assistant must submit update request
-            try {
-                LOGGER.info("Assistant submitting update request for student: " + studentId);
-                // TODO: Open update request submission dialog
-                showInfo("Submit Request", "Update request submission will be implemented in next phase.");
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, "Failed to submit update request", e);
-                showError("Failed to submit update request.");
-            }
+ * Handles Edit Student button click.
+ * Admin: Allows direct edit
+ * Assistant: Submits update request for admin approval
+ */
+private void handleEditStudent(Integer studentId) {
+    if (isAdmin()) {
+        // Admin can edit directly
+        try {
+            LOGGER.info("Admin editing student: " + studentId);
+            
+            // Load FXML and get controller
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/com/studenttracker/view/fxml/student/StudentEdit.fxml")
+            );
+            javafx.scene.Parent root = loader.load();
+            
+            // Get controller and set student ID
+            com.studenttracker.controller.student.StudentEditController controller = loader.getController();
+            
+            // Create modal stage
+            javafx.stage.Stage dialogStage = new javafx.stage.Stage();
+            dialogStage.setTitle("Edit Student");
+            dialogStage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            dialogStage.initOwner(sceneManager.getPrimaryStage());
+            
+            // Set dialog stage in controller
+            controller.setDialogStage(dialogStage);
+            
+            // Set student ID (this will load the data)
+            controller.setStudentId(studentId);
+            
+            // Show modal
+            javafx.scene.Scene scene = new javafx.scene.Scene(root);
+            dialogStage.setScene(scene);
+            dialogStage.showAndWait();
+            
+            // No need to reload - EventBus will update automatically
+            
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to edit student", e);
+            showError("Failed to open edit form: " + e.getMessage());
+        }
+    } else {
+        // Assistant must submit update request
+        try {
+            LOGGER.info("Assistant submitting update request for student: " + studentId);
+            // TODO: Open update request submission dialog
+            showInfo("Submit Request", "Update request submission will be implemented in next phase.");
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to submit update request", e);
+            showError("Failed to submit update request.");
         }
     }
+}
     
     /**
      * Handles Archive Student button click.

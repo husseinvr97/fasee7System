@@ -780,3 +780,19 @@
 .profile-tabs .tab:hover {
     -fx-text-fill: #1e293b;
 }
+
+/* ==================== FILTER BAR OPTIMIZATIONS ==================== */
+
+/* Reduce button padding for tighter layout */
+.primary-button,
+.secondary-button,
+.success-button,
+.danger-button {
+    -fx-padding: 10 18 10 18;
+}
+
+/* Compact buttons for table actions */
+.table-view .table-cell .button {
+    -fx-padding: 8 16 8 16;
+    -fx-font-size: 13px;
+}
